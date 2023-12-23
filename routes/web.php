@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    \App\Jobs\ProcessProductScan::dispatch();
+    // \App\Jobs\ProcessProductScan::dispatch();
     return view('welcome');
 });
