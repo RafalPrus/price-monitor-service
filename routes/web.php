@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\RoutePath;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,11 @@ Route::get('/', function () {
     // \App\Jobs\ProcessProductScan::dispatch();
     return view('welcome');
 });
+
+
+$limiter = config('fortify.limiters.login');
+Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
+    ->middleware(array_filter([
+        'guest:'.config('fortify.guard'),
+        $limiter ? 'throttle:'.$limiter : null,
+    ]));
