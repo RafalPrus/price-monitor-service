@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\NewPasswordController;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use Laravel\Fortify\RoutePath;
 
@@ -34,3 +36,14 @@ Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::
     ->middleware(['guest:'.config('fortify.guard')])
     ->name('register');
 
+Route::post(RoutePath::for('password.email', '/forgot-password'), [PasswordResetLinkController::class, 'store'])
+    ->middleware(['guest:'.config('fortify.guard')])
+    ->name('password.email');
+
+Route::get(RoutePath::for('password.reset', '/reset-password/{token}'), [NewPasswordController::class, 'create'])
+    ->middleware(['guest:'.config('fortify.guard')])
+    ->name('password.reset');
+
+Route::post(RoutePath::for('password.update', '/reset-password'), [NewPasswordController::class, 'store'])
+    ->middleware(['guest:'.config('fortify.guard')])
+    ->name('password.update');

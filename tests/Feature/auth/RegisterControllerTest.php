@@ -12,7 +12,7 @@ class RegisterControllerTest extends TestCase
     /** @test */
     public function user_can_register_into_app_and_is_logged_in_after(): void
     {
-        $email = 'mails@example.com';
+        $email = 'mail@example.com';
         $pass = 'example_pass123';
         $credentials = [
             'email' => $email,
