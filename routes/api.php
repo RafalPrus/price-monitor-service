@@ -29,7 +29,6 @@ use Laravel\Fortify\RoutePath;
 
 
 
-
 Route::middleware('auth:sanctum')->group(function() {
 
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
@@ -48,11 +47,6 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::post(RoutePath::for('password.update', '/reset-password'), [NewPasswordController::class, 'store'])
             ->middleware(['guest:'.config('fortify.guard')])
             ->name('password.update');
-    }
-
-    if (Features::enabled(Features::registration())) {
-        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
-            ->middleware(['guest:'.config('fortify.guard')]);
     }
 
     if (Features::enabled(Features::emailVerification())) {
@@ -85,11 +79,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'store'])
         ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
         ->name('password.confirm');
-
-
-
-
-
 
 
 });

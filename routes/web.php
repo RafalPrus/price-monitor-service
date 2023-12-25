@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use Laravel\Fortify\RoutePath;
 
 /*
@@ -26,4 +27,10 @@ Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::
     ->middleware(array_filter([
         'guest:'.config('fortify.guard'),
         $limiter ? 'throttle:'.$limiter : null,
-    ]));
+    ]))
+    ->name('login');
+
+Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
+    ->middleware(['guest:'.config('fortify.guard')])
+    ->name('register');
+
