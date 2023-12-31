@@ -9,11 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
         Schema::create('price_histories', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('offer_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->timestamp('created_at');
         });
     }
 

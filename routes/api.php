@@ -100,6 +100,13 @@ Route::middleware('auth:sanctum')->group(function() {
         ->name('password.confirm');
 
 
+    Route::middleware('verified')->group(function () {
+        Route::apiResource('offers', \App\Http\Controllers\Auth\Shared\OfferController::class)
+            ->only(['store']);
+
+    });
+
+
 });
 
 
