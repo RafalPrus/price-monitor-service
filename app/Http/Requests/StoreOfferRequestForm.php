@@ -32,7 +32,7 @@ class StoreOfferRequestForm extends FormRequest
                 new AvailableStoreRule,
             ],
             'name' => ['required', 'string', 'min:3', 'max:255'],
-            'is_active' => ['required', 'int', Rule::in([1, 2])]
+            'is_active' => ['required', 'int', Rule::in([0, 1])]
         ];
     }
 
@@ -41,6 +41,21 @@ class StoreOfferRequestForm extends FormRequest
         $data = $this->validated();
         $offer = auth()->user()->offers()->create($data);
         return $offer;
+    }
+
+    public function requiredToSometimes(array $rules): array
+    {
+        foreach ($rules as &$element) {
+            if (is_array($element)) {
+                $this->requiredToSometimes($element);
+            } else {
+                if (is_string($element) && $element == 'required') {
+                    $element = 'sometimes';
+                }
+            }
+        }
+
+        return $rules;
     }
 
     public function bodyParameters(): array
