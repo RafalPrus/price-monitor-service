@@ -101,8 +101,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
     Route::middleware('verified')->group(function () {
-        Route::apiResource('offers', \App\Http\Controllers\Auth\Shared\OfferController::class)
-            ->only(['store', 'update']);
+        Route::apiResource('offers', \App\Http\Controllers\Auth\Shared\OfferController::class);
 
     });
 

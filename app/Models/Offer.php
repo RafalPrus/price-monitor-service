@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Offer extends Model
 {
@@ -12,4 +14,14 @@ class Offer extends Model
     protected $guarded = [];
 
     const UPDATED_AT = null;
+
+    public function priceHistories(): HasMany
+    {
+        return $this->hasMany(PriceHistory::class);
+    }
+
+    public function actualPrice(): BelongsTo
+    {
+        return $this->belongsTo(PriceHistory::class,'price_history_actual_id');
+    }
 }
