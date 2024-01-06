@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('price_histories', function (Blueprint $table) {
             $table->id();
+            $table->decimal('price');
             $table->foreignId('offer_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamp('created_at');
         });

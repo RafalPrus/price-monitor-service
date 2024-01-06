@@ -13,8 +13,6 @@ class Offer extends Model
 
     protected $guarded = [];
 
-    const UPDATED_AT = null;
-
     public function priceHistories(): HasMany
     {
         return $this->hasMany(PriceHistory::class);

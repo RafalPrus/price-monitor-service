@@ -3,6 +3,7 @@
 namespace Tests\Feature\auth;
 
 use App\Models\Offer;
+use App\Models\PriceHistory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -192,18 +193,24 @@ class OfferControllerTest extends TestCase
     }
 
     /** @test */
-    public function user_can_see_single_offer(): void
+    public function user_can_see_single_offer_and_it_has_price_histories(): void
     {
         $user = User::factory()->create();
         $offer = Offer::factory()->create([
             'user_id' => $user->id,
         ]);
-        
+
+        $priceHistories = PriceHistory::factory(5)->create(['offer_id' => $offer->id])->toArray();
+
         $this->actingAs($user);
 
         $response = $this->getJson(route('offers.show', $offer))
             ->assertOk()
             ->assertJsonFragment([$offer->url])
             ->assertJsonFragment([$offer->name]);
+
+        foreach ($priceHistories as $priceHistory) {
+            $response->assertJsonFragment($priceHistory);
+        }
     }
 }
