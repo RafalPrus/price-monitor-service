@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class PriceHistory extends Model
 {
     use HasFactory;
+    const UPDATED_AT = null;
+
+    protected $casts = [
+        'price' => 'decimal:2'
+    ];
 }
