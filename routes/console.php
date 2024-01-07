@@ -17,3 +17,17 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('fake_data', function () {
+    Artisan::call('db:seed', [
+        '--class' => \Database\Seeders\FakeUserSeeder::class,
+    ]);
+
+    Artisan::call('db:seed', [
+        '--class' => \Database\Seeders\FakeOffersSeeder::class,
+    ]);
+})->purpose('Add fake data');
+
+
+
+
