@@ -3,27 +3,22 @@
 namespace App\Services;
 
 use App\Models\Offer;
+use App\Services\Allegro\AllegroOfferCheckerAdapter;
+use App\Services\Contract\OfferCheckerInterface;
 
 class OfferService
 {
-    public $adapters;
+    public $checkerService;
 
-    public function __construct()
+    public function __construct(OfferCheckerInterface $checkerService)
     {
-        $this->adapters = [
-            new AllegroOfferServiceAdapter(),
-        ];
+        $this->checkerService = $checkerService;
     }
     public function processOffer(Offer $offer)
     {
-        foreach ($this->adapters as $adapter) {
-            if($adapter->canHandle($offer->url)) {
-                $serviceAdapter = $adapter;
-            }
+        if(!$this->checkerService->canHandle()) {
+            // todo: exceptiopn
         }
 
-        if(empty($serviceAdapter)) {
-            throw new \RuntimeException("Unknown Offer Domain, can't process offer");
-        }
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Allegro;
 
 use App\Enums\AvailableStore;
 use App\Services\Contract\OfferCheckerInterface;
 use App\Traits\PriceComparisonTrait;
 
-class AllegroOfferServiceAdapter implements OfferCheckerInterface
+class AllegroOfferCheckerAdapter implements OfferCheckerInterface
 {
     use PriceComparisonTrait;
-    public function getOffer(string $url): array
+    public function getOfferPrice(string $url): array
     {
         // TODO: Implement getOffer() method.
     }
