@@ -35,12 +35,12 @@ Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::
     ]))
     ->name('login');
 
-Route::post(RoutePath::for('login.token', '/login-token'), [AuthenticatedSessionController::class, 'store'])
+Route::post(RoutePath::for('login.token', '/login-token'), [\App\Http\Controllers\Api\Guest\BearerTokenController::class, '__invoke'])
     ->middleware(array_filter([
         'guest:'.config('fortify.guard'),
         $limiter ? 'throttle:'.$limiter : null,
     ]))
-    ->name('login');
+    ->name('login.token');
 
 Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
     ->middleware(['guest:'.config('fortify.guard')])
