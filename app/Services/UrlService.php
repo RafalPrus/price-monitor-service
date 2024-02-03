@@ -6,7 +6,7 @@ class UrlService
 {
     public static function getDomain(string $url): string
     {
-        $domain = str_replace('www.', '', $url);
+        $url = str_replace('www.', '', $url);
 
         $url = self::handleHttpPrefix($url);
 
