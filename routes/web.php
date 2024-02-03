@@ -23,27 +23,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-$limiter = config('fortify.limiters.login');
-Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
-    ->middleware(array_filter([
-        'guest:'.config('fortify.guard'),
-        $limiter ? 'throttle:'.$limiter : null,
-    ]))
-    ->name('login');
-
-Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
-    ->middleware(['guest:'.config('fortify.guard')])
-    ->name('register');
-
-Route::post(RoutePath::for('password.email', '/forgot-password'), [PasswordResetLinkController::class, 'store'])
-    ->middleware(['guest:'.config('fortify.guard')])
-    ->name('password.email');
-
-Route::get(RoutePath::for('password.reset', '/reset-password/{token}'), [NewPasswordController::class, 'create'])
-    ->middleware(['guest:'.config('fortify.guard')])
-    ->name('password.reset');
-
-Route::post(RoutePath::for('password.update', '/reset-password'), [NewPasswordController::class, 'store'])
-    ->middleware(['guest:'.config('fortify.guard')])
-    ->name('password.update');
