@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
  * Oferta
@@ -15,10 +16,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $url
  * @property string $name
  * @property bool|int $is_active
+ * @property null|int $price_history_actual_id
  * @property-read \Illuminate\Support\Carbon $created_at
  * @property-read \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PriceHistory[] $priceHistories
- * @property-read \App\Models\PriceHistory $actualPrice
+ * @property-read null|float $price_current
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\PriceHistory[] $priceHistories
+ * @property \App\Models\PriceHistory $priceActual
  */
 
 class Offer extends Model
@@ -32,8 +35,17 @@ class Offer extends Model
         return $this->hasMany(PriceHistory::class);
     }
 
-    public function actualPrice(): BelongsTo
+    public function priceActual(): BelongsTo
     {
         return $this->belongsTo(PriceHistory::class,'price_history_actual_id');
     }
+
+    protected function priceCurrent(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->priceActual->price,
+        );
+    }
+
+
 }
