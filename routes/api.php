@@ -7,11 +7,8 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController;
 use Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController;
 use Laravel\Fortify\Http\Controllers\EmailVerificationNotificationController;
-use Laravel\Fortify\Http\Controllers\NewPasswordController;
 use Laravel\Fortify\Http\Controllers\PasswordController;
-use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 use Laravel\Fortify\Http\Controllers\ProfileInformationController;
-use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 use Laravel\Fortify\RoutePath;
 
@@ -101,7 +98,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
     Route::middleware('verified')->group(function () {
-        Route::apiResource('offers', \App\Http\Controllers\Auth\Shared\OfferController::class);
+        Route::apiResource('offers', \App\Http\Controllers\Api\Shared\OfferController::class);
 
     });
 

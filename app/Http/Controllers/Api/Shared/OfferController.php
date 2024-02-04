@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth\Shared;
+namespace App\Http\Controllers\Api\Shared;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOfferRequestForm;
@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateOfferRequestForm;
 use App\Http\Resources\OfferResource;
 use App\Models\Offer;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OfferController extends Controller
