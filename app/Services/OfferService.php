@@ -8,17 +8,37 @@ use App\Services\Contract\OfferCheckerInterface;
 
 class OfferService
 {
-    public $checkerService;
+    public $checkerServices;
 
-    public function __construct(OfferCheckerInterface $checkerService)
+    public function __construct()
     {
-        $this->checkerService = $checkerService;
+        $this->checkerServices = [
+            AllegroOfferCheckerAdapter::class,
+            // next adapters...
+        ];
     }
     public function processOffer(Offer $offer)
     {
-        if(!$this->checkerService->canHandle()) {
-            // todo: exceptiopn
+        $domain = UrlService::getDomain($offer->url);
+
+        foreach($this->checkerServices as $adapter) {
+            $adapter = (new $adapter);
+
+            if(!$adapter->canHandle($domain)) {
+                continue;
+            }
+
+            $fetchedPrice = $adapter->getOfferPrice($offer->url);
+            break;
         }
+
+        if($fetchedPrice == null) {
+            // ??
+        }
+
+        $offer->priceHistories->create([
+            'price' => $fetchedPrice,
+        ]);
 
     }
 }
