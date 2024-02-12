@@ -7,7 +7,9 @@ use App\Http\Requests\StoreOfferRequestForm;
 use App\Http\Requests\UpdateOfferRequestForm;
 use App\Http\Resources\OfferResource;
 use App\Models\Offer;
+use App\Sorts\ActualPriceSort;
 use Illuminate\Http\JsonResponse;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OfferController extends Controller
@@ -28,7 +30,8 @@ class OfferController extends Controller
      * @responseField created_at string Date the offer was created.
      * @responseField updated_at string Date of the last offer updated.
      * @responseField price_history_actual_id int ID of actual price model.
-     * @responseField actual_price float Actual offer price.
+     * @responseField price_history_actual_id int ID of actual price model.
+     * @responseField price_actual arra Actual offer price model properties.
      *
      * @response 200 {
      * "data" : [
@@ -40,8 +43,8 @@ class OfferController extends Controller
      *          "is_active": 1,
      *          "created_at": "2024-02-04T10:46:41.000000Z",
      *          "updated_at": "2024-02-04T10:46:41.000000Z",
-     *          "price_history_actual_id": 2,
-     *          "actual_price": 223.20,
+     *          "price_history_actual_id": null,
+     *          "actual_price": null,
      *      },
      *      {
      *          "id": 2,
@@ -51,8 +54,13 @@ class OfferController extends Controller
      *          "is_active": 1,
      *          "created_at": "2024-02-04T10:46:41.000000Z",
      *          "updated_at": "2024-02-04T10:46:41.000000Z",
-     *          "price_history_actual_id": null,
-     *          "actual_price": null,
+     *          "price_history_actual_id" => 21
+     *          "price_actual" => array:4 [
+     *              "id" => 21,
+     *              "price" => "99722.79",
+     *              "offer_id" => 5,
+     *              "created_at" => "1997-04-01T01:50:45.000000Z"
+     *          ],
      *      }
      *  ]
      * }
@@ -60,11 +68,15 @@ class OfferController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
+
         $offers = QueryBuilder::for(Offer::class)
             ->where('user_id', $userId)
             ->with('priceActual')
-            ->allowedSorts(['name', 'url'])
-            ->jsonPaginate();
+            ->allowedSorts(['name', 'url', 'price_histories.price',
+                AllowedSort::custom('price-actual', new ActualPriceSort(), 'price'),
+            ])
+            ->jsonPaginate()
+        ;
 
         return OfferResource::collection($offers);
     }

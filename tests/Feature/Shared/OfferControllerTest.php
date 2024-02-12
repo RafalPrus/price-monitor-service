@@ -262,4 +262,42 @@ class OfferControllerTest extends TestCase
             $response->assertJsonFragment($offer->priceActual->toArray());
         }
     }
+
+    /** @test */
+    public function user_can_sort_his_offers_by_actual_price(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $offersCount = 10;
+        $offers = Offer::factory()
+            ->count($offersCount)
+            ->has(PriceHistory::factory()->count(5), 'priceHistories')
+            ->create([
+                'user_id' => $user->id,
+            ]);
+
+        foreach ($offers as $offer) {
+            $offer->price_history_actual_id = $offer->priceHistories->first()->id;
+            $offer->save();
+        }
+
+        $prices = [];
+        foreach($offers as $index => $offer) {
+            $prices[$index] = ['offer_id' => $offer->id, 'actual_price' => $offer->price_current];
+        }
+        usort($prices, function($a, $b) {
+            return $a['actual_price'] <=> $b['actual_price'];
+        });
+
+        $response = $this->getJson(route('offers.index', ['sort' => 'price-actual']))
+            ->assertOk()
+            ->assertJsonCount($offersCount, 'data');
+            
+        $r = $response->json('data');
+
+        foreach ($prices as $index => $price) {
+            $this->assertEquals($r[$index]['id'], $price['offer_id']);
+            $this->assertEquals($r[$index]['price_actual']['price'], $price['actual_price']);
+        }
+    }
 }

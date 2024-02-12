@@ -13,7 +13,8 @@ class OfferPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        // ograć, jak będą role
+        return false;
     }
 
     /**
@@ -29,9 +30,12 @@ class OfferPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user): Response
     {
-        //
+        // ograć jak będa ograniczenia
+        return $user->hasVerifiedEmail()
+            ? Response::allow()
+            : Response::denyWithStatus(404);
     }
 
     /**
@@ -52,21 +56,5 @@ class OfferPolicy
         return $user->id == $offer->user_id
             ? Response::allow()
             : Response::denyWithStatus(404);
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Offer $offer): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Offer $offer): bool
-    {
-        //
     }
 }
