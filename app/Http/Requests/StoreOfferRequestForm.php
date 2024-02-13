@@ -9,16 +9,8 @@ use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreOfferRequestForm extends FormRequest
+class StoreOfferRequestForm extends AbstractRequestForm
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -41,24 +33,9 @@ class StoreOfferRequestForm extends FormRequest
     {
         $data = $this->validated();
         $data['domain'] = UrlService::getDomain($data['url']);
-        
+
         $offer = auth()->user()->offers()->create($data);
         return $offer;
-    }
-
-    public function requiredToSometimes(array $rules): array
-    {
-        foreach ($rules as &$element) {
-            if (is_array($element)) {
-                $this->requiredToSometimes($element);
-            } else {
-                if (is_string($element) && $element == 'required') {
-                    $element = 'sometimes';
-                }
-            }
-        }
-
-        return $rules;
     }
 
     public function bodyParameters(): array
