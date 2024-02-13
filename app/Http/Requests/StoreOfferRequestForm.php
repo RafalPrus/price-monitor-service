@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Offer;
 use App\Rules\AvailableStoreRule;
+use App\Services\UrlService;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -39,6 +40,8 @@ class StoreOfferRequestForm extends FormRequest
     public function store(): Offer
     {
         $data = $this->validated();
+        $data['domain'] = UrlService::getDomain($data['url']);
+        
         $offer = auth()->user()->offers()->create($data);
         return $offer;
     }

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
  * @property-read int $id
  * @property int $user_id
  * @property string $url
+ * @property string $domain
  * @property string $name
  * @property bool|int $is_active
  * @property null|int $price_history_actual_id

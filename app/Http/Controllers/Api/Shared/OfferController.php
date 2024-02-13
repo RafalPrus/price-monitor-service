@@ -9,6 +9,7 @@ use App\Http\Resources\OfferResource;
 use App\Models\Offer;
 use App\Sorts\ActualPriceSort;
 use Illuminate\Http\JsonResponse;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -74,6 +75,10 @@ class OfferController extends Controller
             ->with('priceActual')
             ->allowedSorts(['name', 'url', 'price_histories.price',
                 AllowedSort::custom('price-actual', new ActualPriceSort(), 'price'),
+            ])
+            ->allowedFilters([
+                AllowedFilter::exact('domain'),
+                AllowedFilter::partial('name'),
             ])
             ->jsonPaginate()
         ;

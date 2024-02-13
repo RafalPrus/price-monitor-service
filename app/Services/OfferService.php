@@ -14,7 +14,7 @@ class OfferService
     {
         $this->checkerServices = [
             AllegroOfferCheckerAdapter::class,
-            // next adapters...
+            // put next adapters...
         ];
     }
     public function processOffer(Offer $offer)

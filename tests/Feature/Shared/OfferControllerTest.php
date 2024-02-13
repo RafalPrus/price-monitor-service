@@ -292,12 +292,59 @@ class OfferControllerTest extends TestCase
         $response = $this->getJson(route('offers.index', ['sort' => 'price-actual']))
             ->assertOk()
             ->assertJsonCount($offersCount, 'data');
-            
+
         $r = $response->json('data');
 
         foreach ($prices as $index => $price) {
             $this->assertEquals($r[$index]['id'], $price['offer_id']);
             $this->assertEquals($r[$index]['price_actual']['price'], $price['actual_price']);
         }
+    }
+
+    /** @test */
+    public function user_can_filter_his_offers_by_domain(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $offersCount = 10;
+        $offers = Offer::factory()
+            ->count($offersCount)
+            ->create([
+                'user_id' => $user->id,
+            ]);
+        
+        $domains = [];
+        foreach ($offers as $index => $offer) {
+            if (empty($domains[$offer->domain])) {
+                $domains[$offer->domain] = 1;
+            } else {
+                $domains[$offer->domain] += 1;
+            }
+
+            if ($index == 9) {
+                Offer::factory()
+                    ->count(3)
+                    ->create([
+                        'user_id' => $user->id,
+                        'url' => $offer->url,
+                    ]);
+                
+                $domains[$offer->domain] += 3;
+            }
+        };
+
+        foreach ($domains as $domain => $count) {
+            $response = $this->getJson(route('offers.index', ['filter' => ['domain' => $domain]]))
+                ->assertOk()
+                ->assertJsonCount($count, 'data')
+                ->assertJsonFragment(['domain' => $domain]);
+        }
+
+        $firstFilter = [array_key_first($domains), $domains[array_key_first($domains)]];
+        $secondFilter = [array_key_last($domains), $domains[array_key_last($domains)]];
+        $expectedOffersCount = $firstFilter[1] + $secondFilter[1];
+        $response = $this->getJson(route('offers.index', ['filter' => ['domain' => [$firstFilter[0], $secondFilter[0]]]]))
+                ->assertOk()
+                ->assertJsonCount($expectedOffersCount, 'data');
     }
 }

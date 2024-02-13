@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('url');
+            $table->string('domain');
             $table->string('name');
             $table->smallInteger('is_active');
             $table->timestamps();

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Services\UrlService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,9 @@ class OfferFactory extends Factory
             'user_id' => User::factory()->create(),
             'name' => fake()->name(),
             'url' => fake()->url(),
+            'domain' => function(array $attributes) {
+                return UrlService::getDomain($attributes['url']);
+            },
             'is_active' => fake()->numberBetween(0, 1),
         ];
     }
