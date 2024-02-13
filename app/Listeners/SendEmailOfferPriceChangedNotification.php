@@ -23,6 +23,7 @@ class SendEmailOfferPriceChangedNotification
      */
     public function handle(OfferPriceChanged $event): void
     {
+        dump('w listener');
         Notification::send(auth()->user(), new OfferPriceChangedNotification($event->offer));
     }
 }

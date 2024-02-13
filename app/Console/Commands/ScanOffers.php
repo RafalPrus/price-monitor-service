@@ -2,9 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Events\OfferPriceChanged;
 use App\Jobs\ProcessOfferScan;
 use App\Models\Offer;
+use App\Models\PriceHistory;
 use App\Models\User;
+use App\Notifications\OfferPriceChangedNotification;
 use Illuminate\Console\Command;
 
 class ScanOffers extends Command
@@ -14,7 +17,7 @@ class ScanOffers extends Command
      *
      * @var string
      */
-    protected $signature = 'app:scan-offers';
+    protected $signature = 'td';
 
     /**
      * The console command description.
