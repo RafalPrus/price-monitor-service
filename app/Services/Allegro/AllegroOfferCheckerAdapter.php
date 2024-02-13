@@ -12,6 +12,7 @@ class AllegroOfferCheckerAdapter implements OfferCheckerInterface
     public function getOfferPrice(string $url): array
     {
         // TODO: Implement getOffer() method.
+        return [];
     }
     public function canHandle(string $domain): bool
     {

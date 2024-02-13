@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\Offer;
+use App\Services\OfferService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,17 +12,16 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Sleep;
 
-class ProcessProductScan implements ShouldQueue
+class ProcessOfferScan implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(
+        public Offer $offer,
+    ) {}
 
     /**
      * Execute the job.
@@ -28,5 +29,8 @@ class ProcessProductScan implements ShouldQueue
     public function handle(): void
     {
         Sleep::for(60)->seconds(); //TODO: implement
+
+        $offerService = new OfferService();
+        $offerService->processOffer($this->offer);
     }
 }
