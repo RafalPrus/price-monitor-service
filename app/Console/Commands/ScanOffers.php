@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Events\OfferPriceChanged;
+use App\Events\Offer\OfferPriceChanged;
 use App\Jobs\ProcessOfferScan;
 use App\Models\Offer;
 use App\Models\PriceHistory;

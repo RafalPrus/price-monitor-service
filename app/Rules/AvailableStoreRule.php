@@ -19,7 +19,7 @@ class AvailableStoreRule implements ValidationRule
     {
         $domain = UrlService::getDomain($value);
 
-        if (!in_array($domain, AvailableStore::getAvailableStores())) {
+        if (!in_array($domain, AvailableStore::getArrayOfValues())) {
             $fail("The {$attribute} is invalid.");
         }
     }

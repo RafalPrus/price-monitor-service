@@ -16,13 +16,13 @@ class UpdateOfferRequestForm extends StoreOfferRequestForm
      */
     public function rules(): array
     {
-        $rules = $this->requiredToSometimes(parent::rules());
+        $rules = $this->requiredToSometimes(parent::rules(), ['url']);
         return $rules;
     }
 
     public function update(Offer $offer)
     {
-        $data = $this->safe()->only(['name', 'is_active']);
+        $data = $this->validated();
 
         $offer->update($data);
         return $offer;

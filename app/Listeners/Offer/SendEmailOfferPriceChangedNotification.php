@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Offer;
 
-use App\Notifications\OfferPriceChangedNotification;
-use App\Events\OfferPriceChanged;
+use App\Notifications\Offer\OfferPriceChangedNotification;
+use App\Events\Offer\OfferPriceChanged;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
@@ -23,7 +23,6 @@ class SendEmailOfferPriceChangedNotification
      */
     public function handle(OfferPriceChanged $event): void
     {
-        dump('w listener');
         Notification::send(auth()->user(), new OfferPriceChangedNotification($event->offer));
     }
 }

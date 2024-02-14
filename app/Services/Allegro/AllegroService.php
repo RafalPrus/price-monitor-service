@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Http;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\HttpClient\HttpClient;
-class AllegroService
+use Symfony\Component\Panther\PantherTestCase;
+class AllegroService extends PantherTestCase
 {
     public string $className;
     public string $body;
@@ -30,21 +31,21 @@ class AllegroService
             return true;
         }
 
+        // dodane na potrzeby testowania
         $this->body = $body;
         return true;
 
     }
 
-    public function getOfferPrice(): array
+    public function getOfferPrice(): float
     {
         $crawler = new Crawler($this->clearBody($this->body));
 
         return $crawler->filter($this->className)->each(function (Crawler $node, $i) {
             $price = $node->text();
             $price = explode(' ', $price);
-            return $price[0];
-
-        });
+            return (float) str_replace(',', '.', $price[0]);
+        })[0];
     }
 
     public function clearBody(string $body): string

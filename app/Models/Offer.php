@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Oferta
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
  * @property-read \Illuminate\Support\Carbon $updated_at
  * @property-read null|float $price_current
  * @property \Illuminate\Database\Eloquent\Collection|\App\Models\PriceHistory[] $priceHistories
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
  * @property \App\Models\PriceHistory $priceActual
  */
 
@@ -41,12 +43,15 @@ class Offer extends Model
         return $this->belongsTo(PriceHistory::class,'price_history_actual_id');
     }
 
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
     protected function priceCurrent(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->priceActual->price,
         );
     }
-
-
 }

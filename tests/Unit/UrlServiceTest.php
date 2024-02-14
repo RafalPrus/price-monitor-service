@@ -17,7 +17,7 @@ class UrlServiceTest extends TestCase
         $urlService = new UrlService();
         $domain = $urlService->getDomain($url);
         $this->assertEquals($result, $domain);
-        $this->assertTrue(in_array($domain, AvailableStore::getAvailableStores()));
+        $this->assertTrue(in_array($domain, AvailableStore::getArrayOfValues()));
     }
 
     public static function urlProvider(): array

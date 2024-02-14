@@ -28,7 +28,7 @@ class ProcessOfferScan implements ShouldQueue
      */
     public function handle(): void
     {
-        Sleep::for(60)->seconds(); //TODO: implement
+        //Sleep::for(60)->seconds();
 
         $offerService = new OfferService();
         $offerService->processOffer($this->offer);

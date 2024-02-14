@@ -2,8 +2,10 @@
 
 namespace App\Services\Contract;
 
+use App\Models\Offer;
+
 interface OfferCheckerInterface
 {
-    public function getOfferPrice(string $url): array;
-    public function canHandle(string $domain): bool;
+    public function getOfferPrice(string $url): float;
+    public function canHandle(Offer $offer): bool;
 }

@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Enums;
+use App\Traits\ValuesToArrayTrait;
 
 enum CategoryEnum: int
 {
+    use ValuesToArrayTrait;
     case CLOTHES = 1;
     case ELECTRONICS = 2;
     case OTHER = 3;
@@ -15,10 +17,5 @@ enum CategoryEnum: int
             self::ELECTRONICS => 'electronics',
             self::OTHER => 'other',
         };
-    }
-
-    public static function getCategoriesIds()
-    {
-        return array_map(fn($case) => $case->value, self::cases());
     }
 }

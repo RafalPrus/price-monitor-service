@@ -19,9 +19,9 @@ class OfferController extends Controller
      * Offers - list
      *
      * sorts: name, url
-     * filters:
+     * filters: domain, name
      *
-     * @group Auth.User
+     * @group Shared.Offers
      *
      * @responseField id integer Offer id.
      * @responseField user_id integer User id.
@@ -89,10 +89,11 @@ class OfferController extends Controller
     /**
      * Offers - add
      *
-     * @group Auth.User
+     * @group Shared.Offers
      */
     public function store(StoreOfferRequestForm $form)
     {
+        $this->authorize('store', Offer::class);
         $offer = $form->store();
         return new OfferResource($offer);
     }
@@ -100,7 +101,7 @@ class OfferController extends Controller
     /**
      * Offers - update
      *
-     * @group Auth.User
+     * @group Shared.Offers
      */
     public function update(UpdateOfferRequestForm $form, Offer $offer)
     {
@@ -113,7 +114,7 @@ class OfferController extends Controller
     /**
      * Offers - update
      *
-     * @group Auth.User
+     * @group Shared.Offers
      */
     public function show(Offer $offer)
     {
@@ -126,7 +127,7 @@ class OfferController extends Controller
     /**
      * Offers - delete
      *
-     * @group Auth.User
+     * @group Shared.Offers
      */
     public function destroy(Offer $offer)
     {

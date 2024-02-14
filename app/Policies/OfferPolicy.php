@@ -28,9 +28,9 @@ class OfferPolicy
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can store models.
      */
-    public function create(User $user): Response
+    public function store(User $user): Response
     {
         // ograć jak będa ograniczenia
         return $user->hasVerifiedEmail()

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Shared;
+namespace Tests\Unit;
 
 use App\Models\Offer;
 use App\Models\PriceHistory;

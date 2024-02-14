@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Offer;
 
 use App\Models\Offer;
 use Illuminate\Broadcasting\Channel;
@@ -22,17 +22,5 @@ class OfferPriceChanged
     public function __construct(Offer $offer)
     {
         $this->offer = $offer;
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
     }
 }

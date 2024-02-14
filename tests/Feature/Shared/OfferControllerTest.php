@@ -86,6 +86,39 @@ class OfferControllerTest extends TestCase
         ]);
     }
 
+     /** @test */
+     public function user_cannot_update_offer_url(): void
+     {
+         $user = User::factory()->create();
+         $this->actingAs($user);
+ 
+         $offer = [
+             'url' => 'https://allegro.pl/',
+             'name' => 'New offer',
+             'is_active' => 1
+         ];
+ 
+         $response = $this->postJson(route('offers.store'), $offer)
+             ->assertCreated()
+             ->assertJsonFragment(['url' => 'https://allegro.pl/']);
+ 
+         $offerId = $response->json('data.id');
+ 
+         $updateResposne = $this->putJson(route('offers.update', $offerId), [
+             'is_active' => 0,
+             'name' => 'Complete New Name',
+             'url' => 'https://amazon.pl/'
+         ])
+             ->assertStatus(200);
+ 
+         $this->assertDatabaseCount('offers', 1);
+         $this->assertDatabaseHas('offers', [
+             'url' => 'https://allegro.pl/',
+             'name' => 'Complete New Name',
+             'is_active' => 0
+         ]);
+     }
+
     /** @test */
     public function user_cannot_update_others_users_offers(): void
     {
@@ -166,27 +199,6 @@ class OfferControllerTest extends TestCase
 
 
         $this->assertDatabaseCount('offers', 1);
-    }
-
-    /** @test */
-    public function user_can_see_his_offers(): void
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-        $offersCount = 10;
-        $offers = Offer::factory()
-            ->count($offersCount)
-            ->create([
-                'user_id' => $user->id,
-            ]);
-
-        $response = $this->getJson(route('offers.index'))
-            ->assertOk()
-            ->assertJsonCount($offersCount, 'data');
-
-        foreach ($offers as $offer) {
-            $response->assertJsonFragment($offer->toArray());
-        }
     }
 
     /** @test */

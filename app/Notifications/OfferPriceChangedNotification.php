@@ -35,9 +35,9 @@ class OfferPriceChangedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->greeting("Ofert {$this->offer->name} zmeniła się")
+                    ->greeting("Oferta {$this->offer->name} zmeniła się")
                     ->line("Nowa cena: {$this->offer->price_current}")
                     ->action('Przejdź do oferty', url($this->offer->url))
-                    ->line('Thank you for using our application!');
+                    ->line('Dzięki, że jesteś z nami!');
     }
 }

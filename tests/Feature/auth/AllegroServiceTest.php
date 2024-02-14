@@ -5,6 +5,8 @@ namespace Tests\Feature\auth;
 use App\Models\User;
 use App\Services\Allegro\AllegroService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class AllegroServiceTest extends TestCase
@@ -15,16 +17,14 @@ class AllegroServiceTest extends TestCase
     public function allegro_service_is_returning_price_from_url(): void
     {
         $body = $this->excerptBodyOffer();
+        
         $url = $this->getUrl();
         $service = new AllegroService();
 
         $canHandle = $service->canHandle($url, $body);
         $fetchedPrice = $service->getOfferPrice();
         $this->assertSame(true, $canHandle);
-        $this->assertSame('6,99', $fetchedPrice[0]);
-        $this->assertCount(1, $fetchedPrice);
-
-
+        $this->assertSame(6.99, $fetchedPrice);
 
     }
 

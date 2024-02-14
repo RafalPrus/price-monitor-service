@@ -2,12 +2,11 @@
 
 namespace App\Enums;
 
+use App\Services\Allegro\AllegroOfferCheckerAdapter;
+use App\Traits\ValuesToArrayTrait;
+
 enum AvailableStore: string
 {
-    case ALLEGRO = 'allegro.pl';
-
-    public static function getAvailableStores(): array
-    {
-        return array_map(fn($case) => $case->value, self::cases());
-    }
+    use ValuesToArrayTrait;
+    case ALLEGRO = AllegroOfferCheckerAdapter::DOMAIN;
 }

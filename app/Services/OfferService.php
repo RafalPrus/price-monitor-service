@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Events\OfferPriceChanged;
+use App\Events\Offer\OfferPriceChanged;
 use App\Models\Offer;
 use App\Services\Allegro\AllegroOfferCheckerAdapter;
 use App\Services\Contract\OfferCheckerInterface;
@@ -13,19 +13,15 @@ class OfferService
 
     public function __construct()
     {
-        $this->checkerServices = [
-            AllegroOfferCheckerAdapter::class,
-            // put next adapters...
-        ];
+        $this->checkerServices = config('theapp.checker_services');
     }
     public function processOffer(Offer $offer)
     {
-        $domain = UrlService::getDomain($offer->url);
 
         foreach($this->checkerServices as $adapter) {
             $adapter = (new $adapter);
 
-            if(!$adapter->canHandle($domain)) {
+            if(!$adapter->canHandle($offer)) {
                 continue;
             }
 
