@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * Oferta
+ * Kategoria
  *
  * @property-read int $id
  * @property string $name

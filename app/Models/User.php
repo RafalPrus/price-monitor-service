@@ -10,6 +10,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * Użytkownik
+ *
+ * @property-read int $id
+ * @property string $name
+ * @property string $email
+ * @property null|\Illuminate\Support\Carbon $email_verified_at
+ * @property-read \Illuminate\Support\Carbon $created_at
+ * @property-read \Illuminate\Support\Carbon $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Offer[] $offers
+ */
 class User extends Authenticatable implements \Illuminate\Contracts\Auth\MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
