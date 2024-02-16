@@ -3,11 +3,11 @@
 namespace App\Services\Allegro;
 
 use Illuminate\Support\Facades\Http;
+use Spatie\Browsershot\Browsershot;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\Panther\PantherTestCase;
-class AllegroService extends PantherTestCase
+class AllegroService
 {
     public string $className;
     public string $body;
@@ -18,12 +18,26 @@ class AllegroService extends PantherTestCase
 
     public function canHandle(string $url, ?string $body = null): bool
     {
+        $body = Browsershot::url($url)
+            //->setNodeBinary(config('browsershot.node'))
+            //->setNpmBinary(config('browsershot.npm'))
+            ->setRemoteInstance(config('theapp.browsershot.chromium.host_ip'))
+            ->bodyHtml();
+
+        dd($body);
+
+
         $browser = new HttpBrowser(HttpClient::create());
         if(empty($body)) {
-            $browser->request('GET', $url);
+            $browser->xmlHttpRequest('GET', $url);
             $response = $browser->getResponse();
-
+            dump($response);
             if($response->getStatusCode() != 200) {
+                $browser = new HttpBrowser(HttpClient::create());
+                $browser->xmlHttpRequest('GET', $url);
+                $response = $browser->getResponse();
+                dump($response);
+                dd();
                 return false;
             }
 

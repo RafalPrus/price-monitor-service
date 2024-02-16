@@ -4,6 +4,7 @@ namespace Tests\Feature\auth;
 
 use App\Models\User;
 use App\Services\Allegro\AllegroService;
+use App\Services\Wrangler\WranglerService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -19,9 +20,10 @@ class AllegroServiceTest extends TestCase
         $body = $this->excerptBodyOffer();
         
         $url = $this->getUrl();
+
         $service = new AllegroService();
 
-        $canHandle = $service->canHandle($url, $body);
+        $canHandle = $service->canHandle($url);
         $fetchedPrice = $service->getOfferPrice();
         $this->assertSame(true, $canHandle);
         $this->assertSame(6.99, $fetchedPrice);

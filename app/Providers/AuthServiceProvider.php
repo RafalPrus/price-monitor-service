@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\Offer;
 use App\Policies\OfferPolicy;
 use App\Services\FrontUrlService;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;

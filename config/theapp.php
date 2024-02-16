@@ -8,7 +8,18 @@ return [
             'class_name' => ".mli8_k4.msa3_z4.mqu1_1.mp0t_ji.m9qz_yo.mgmw_qw.mgn2_27.mgn2_30_s.mpof_vs.munh_8.mp4t_4",
         ]
     ],
+    'wrangler' => [
+        'price' => [
+            'class_name' => ".prices",
+        ]
+    ],
     'checker_services' => [
         App\Services\Allegro\AllegroOfferCheckerAdapter::class,
-    ]
+        App\Services\Wrangler\WranglerOfferCheckerAdapter::class,
+    ],
+    'browsershot' => [
+        'chromium' => [
+            'host_ip' => gethostbyname(env('BROWSER_SHOT_CHROMIUM_HOSTNAME')),
+        ],    
+    ],
 ];
