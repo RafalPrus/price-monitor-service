@@ -10,8 +10,10 @@ return [
     ],
     'wrangler' => [
         'price' => [
-            'class_name' => ".prices",
-        ]
+            'class_name' => ".sales",
+        ],
+        'api_provider' => 'https://proxy.scrapeops.io/v1/',
+        'api_key' => env('WRANGLER_API_PROVIDER_KEY'),
     ],
     'checker_services' => [
         App\Services\Allegro\AllegroOfferCheckerAdapter::class,
@@ -20,6 +22,6 @@ return [
     'browsershot' => [
         'chromium' => [
             'host_ip' => gethostbyname(env('BROWSER_SHOT_CHROMIUM_HOSTNAME')),
-        ],    
+        ],
     ],
 ];

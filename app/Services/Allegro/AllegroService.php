@@ -21,10 +21,13 @@ class AllegroService
         $body = Browsershot::url($url)
             //->setNodeBinary(config('browsershot.node'))
             //->setNpmBinary(config('browsershot.npm'))
+            //->setNodeBinary('/usr/local/bin/node')
+            //->setNpmBinary('/usr/local/bin/npm')
+            ->userAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36')
             ->setRemoteInstance(config('theapp.browsershot.chromium.host_ip'))
-            ->bodyHtml();
-
-        dd($body);
+            ->windowSize(1024, 768)
+            ;
+        $body = $body->bodyHtml();
 
 
         $browser = new HttpBrowser(HttpClient::create());

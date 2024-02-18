@@ -7,8 +7,9 @@ use App\Jobs\ProcessOfferScan;
 use App\Models\Offer;
 use App\Models\PriceHistory;
 use App\Models\User;
-use App\Notifications\OfferPriceChangedNotification;
+use App\Notifications\Offer\OfferPriceChangedNotification;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Notification;
 
 class TestScanOffers extends Command
 {
@@ -46,14 +47,14 @@ class TestScanOffers extends Command
             $offer->price_history_actual_id = $offer->priceHistories->first()->id;
             $offer->save();
         }
-        
+
         foreach ($offers as $offer) {
             // dump($user->email);
             // $user->notify(new OfferPriceChangedNotification($offer));
             dump('before');
             OfferPriceChanged::dispatch($offer);
             dump('after');
-            //Notification::send(auth()->user(), new OfferPriceChangedNotification($offer));
+            Notification::send(auth()->user(), new OfferPriceChangedNotification($offer));
         }
         // $activeUsers = User::where('is_active', 1);
         // foreach($activeUsers as $user) {

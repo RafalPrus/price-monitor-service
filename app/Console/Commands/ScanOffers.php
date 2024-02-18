@@ -29,7 +29,7 @@ class ScanOffers extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $activeUsers = User::where('is_active', 1);
         foreach($activeUsers as $user) {

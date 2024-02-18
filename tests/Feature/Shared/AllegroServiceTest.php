@@ -1,13 +1,9 @@
 <?php
 
-namespace Tests\Feature\auth;
+namespace Tests\Feature\Shared;
 
-use App\Models\User;
 use App\Services\Allegro\AllegroService;
-use App\Services\Wrangler\WranglerService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Client\Request;
-use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class AllegroServiceTest extends TestCase
@@ -18,7 +14,7 @@ class AllegroServiceTest extends TestCase
     public function allegro_service_is_returning_price_from_url(): void
     {
         $body = $this->excerptBodyOffer();
-        
+
         $url = $this->getUrl();
 
         $service = new AllegroService();
