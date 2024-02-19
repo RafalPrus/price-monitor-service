@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Support\Carbon $updated_at
  * @property-read null|float $price_current
  * @property \Illuminate\Database\Eloquent\Collection|\App\Models\PriceHistory[] $priceHistories
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\FailedRequestBid[] $failedRequestBids
  * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
  * @property \App\Models\PriceHistory $priceActual
  */
@@ -46,6 +47,11 @@ class Offer extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function failedRequestBids(): HasMany
+    {
+        return $this->hasMany(FailedRequestBid::class);
     }
 
     protected function priceCurrent(): Attribute

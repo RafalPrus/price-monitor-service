@@ -7,24 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Cena - historia
+ * Nieudane Requesty pobierające dane z oferty
  *
  * @property-read int $id
- * @property float $price
  * @property int $offer_id
- * @property-read \Illuminate\Support\Carbon $created_at
- * @property \App\Models\Offer $offer
+ * @property string $error_message
+ * @property \App\Models\Offer $offers
  */
-class PriceHistory extends Model
+
+class FailedRequestBid extends Model
 {
     use HasFactory;
-    const UPDATED_AT = null;
-
-    protected $casts = [
-        'price' => 'decimal:2'
-    ];
-
-    public function offer(): BelongsTo
+    public function offers(): BelongsTo
     {
         return $this->belongsTo(Offer::class);
     }

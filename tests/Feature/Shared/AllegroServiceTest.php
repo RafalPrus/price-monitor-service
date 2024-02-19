@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Shared;
 
+use App\Models\Offer;
 use App\Services\Allegro\AllegroService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class AllegroServiceTest extends TestCase
@@ -13,17 +15,20 @@ class AllegroServiceTest extends TestCase
     /** @test */
     public function allegro_service_is_returning_price_from_url(): void
     {
-        $body = $this->excerptBodyOffer();
+        $offer = Offer::factory()->create([
+            'url' => $this->getUrl(),
+        ]);
 
-        $url = $this->getUrl();
+        Http::fake([
+            '*' => Http::response($this->excerptBodyOffer(), 200),
+        ]);
 
-        $service = new AllegroService();
+        $service = new AllegroService($offer);
 
-        $canHandle = $service->canHandle($url);
+        $canHandle = $service->canHandle();
         $fetchedPrice = $service->getOfferPrice();
         $this->assertSame(true, $canHandle);
         $this->assertSame(6.99, $fetchedPrice);
-
     }
 
     public function excerptBodyOffer(): string

@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Events\Offer\OfferPriceChanged;
+use App\Exceptions\InvalidBodyResponseException;
 use App\Models\Offer;
-use App\Services\Allegro\AllegroOfferCheckerAdapter;
-use App\Services\Contract\OfferCheckerInterface;
+use Illuminate\Support\Facades\Log;
 
 class OfferService
 {
@@ -19,18 +19,29 @@ class OfferService
     {
 
         foreach($this->checkerServices as $adapter) {
-            $adapter = (new $adapter);
+            $adapter = (new $adapter($offer));
+            
+            try {
+                if(!$adapter->canHandle($offer)) {
+                    continue;
+                }
 
-            if(!$adapter->canHandle($offer)) {
-                continue;
+                $fetchedPrice = $adapter->getOfferPrice($offer->url);
+            } catch (InvalidBodyResponseException $e) {
+                Log::error($e->getMessage());
+                $offer->failedRequestBids()->create([
+                    'error_message' => $e->getMessage(),
+                ]);
+
+                $fetchedPrice = null;
+                break;
             }
-
-            $fetchedPrice = $adapter->getOfferPrice($offer->url);
+            
             break;
         }
 
         if($fetchedPrice == null) {
-            // something went wrong... 
+            return;
         }
 
         if ($this->hasPriceChanged($fetchedPrice, $offer->price_current)) {

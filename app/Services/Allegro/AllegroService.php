@@ -2,67 +2,63 @@
 
 namespace App\Services\Allegro;
 
+use App\Exceptions\InvalidBodyResponseException;
+use App\Models\Offer;
+use App\Services\AbstractOfferService;
 use Illuminate\Support\Facades\Http;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\HttpClient\HttpClient;
-class AllegroService
+class AllegroService extends AbstractOfferService
 {
     public string $className;
     public string $body;
-    public function __construct()
+    public string $apiProvider;
+    public string $apiKey;
+    public Offer $offer;
+    public function __construct(Offer $offer)
     {
-        $this->className = config('theapp.allegro.price.class_name');
+        $this->className = config('theapp.allegro.data_provider.price_location.class_name');
+        $this->apiProvider = config('theapp.allegro.data_provider.api_provider');
+        $this->apiKey = config('theapp.allegro.data_provider.api_key');
+        $this->offer = $offer;
     }
 
-    public function canHandle(string $url, ?string $body = null): bool
+    public function canHandle(): bool
     {
-        $body = Browsershot::url($url)
-            //->setNodeBinary(config('browsershot.node'))
-            //->setNpmBinary(config('browsershot.npm'))
-            //->setNodeBinary('/usr/local/bin/node')
-            //->setNpmBinary('/usr/local/bin/npm')
-            ->userAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36')
-            ->setRemoteInstance(config('theapp.browsershot.chromium.host_ip'))
-            ->windowSize(1024, 768)
-            ;
-        $body = $body->bodyHtml();
+        $response = Http::get($this->apiProvider, [
+            'api_key' => $this->apiKey,
+            'url' => $this->offer->url,
+        ]);
 
-
-        $browser = new HttpBrowser(HttpClient::create());
-        if(empty($body)) {
-            $browser->xmlHttpRequest('GET', $url);
-            $response = $browser->getResponse();
-            dump($response);
-            if($response->getStatusCode() != 200) {
-                $browser = new HttpBrowser(HttpClient::create());
-                $browser->xmlHttpRequest('GET', $url);
-                $response = $browser->getResponse();
-                dump($response);
-                dd();
-                return false;
-            }
-
-            $this->body = $response->getContent();
-            return true;
+        if(!$response->status() == 500) {
+            $this->throwCantFetchDataException($this->offer->id);
         }
 
-        // dodane na potrzeby testowania
-        $this->body = $body;
-        return true;
+        if(!$response->successful()) {
+            return false;
+        }
 
+        $this->body = $response->body();
+        return true;
     }
 
-    public function getOfferPrice(): float
+    public function getOfferPrice(): float|bool
     {
         $crawler = new Crawler($this->clearBody($this->body));
 
-        return $crawler->filter($this->className)->each(function (Crawler $node, $i) {
+        $price = $crawler->filter($this->className)->each(function (Crawler $node, $i) {
             $price = $node->text();
             $price = explode(' ', $price);
             return (float) str_replace(',', '.', $price[0]);
-        })[0];
+        });
+
+        if(empty($price)) {
+            $this->throwCantProccesOfferPriceException($this->offer->url, $this->body);
+        }
+        dd($price);
+        return $price[0];
     }
 
     public function clearBody(string $body): string
