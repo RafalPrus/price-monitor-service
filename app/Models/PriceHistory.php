@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PriceHistory extends Model
 {
+    protected $guarded = [];
     use HasFactory;
     const UPDATED_AT = null;
 

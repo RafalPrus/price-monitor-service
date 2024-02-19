@@ -9,6 +9,7 @@ use App\Models\PriceHistory;
 use App\Models\User;
 use App\Notifications\OfferPriceChangedNotification;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ScanOffers extends Command
 {
@@ -17,23 +18,23 @@ class ScanOffers extends Command
      *
      * @var string
      */
-    protected $signature = 'td';
+    protected $signature = 'offers:scan';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Run scan offer process';
 
     /**
      * Execute the console command.
      */
     public function handle(): void
     {
-        $activeUsers = User::where('is_active', 1);
+        $activeUsers = User::whereNotNull('email_verified_at')->get();
         foreach($activeUsers as $user) {
-            $activeOffers = $user->offers()->where('is_active', 1);
+            $activeOffers = $user->offers()->where('is_active', 1)->get();
             foreach ($activeOffers as $offer) {
                 ProcessOfferScan::dispatch($offer);
             }

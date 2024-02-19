@@ -12,14 +12,14 @@ use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\HttpClient\HttpClient;
 class AllegroService extends AbstractOfferService
 {
-    public string $className;
+    public array $classNames;
     public string $body;
     public string $apiProvider;
     public string $apiKey;
     public Offer $offer;
     public function __construct(Offer $offer)
     {
-        $this->className = config('theapp.allegro.data_provider.price_location.class_name');
+        $this->classNames = config('theapp.allegro.data_provider.price_location.class_names');
         $this->apiProvider = config('theapp.allegro.data_provider.api_provider');
         $this->apiKey = config('theapp.allegro.data_provider.api_key');
         $this->offer = $offer;
@@ -27,7 +27,7 @@ class AllegroService extends AbstractOfferService
 
     public function getOfferBody(): bool
     {
-        $response = Http::get($this->apiProvider, [
+        $response = Http::timeout(121)->get($this->apiProvider, [
             'api_key' => $this->apiKey,
             'url' => $this->offer->url,
         ]);
@@ -48,14 +48,21 @@ class AllegroService extends AbstractOfferService
     {
         $crawler = new Crawler($this->clearBody($this->body));
 
-        $price = $crawler->filter($this->className)->each(function (Crawler $node, $i) {
-            $price = $node->text();
-            $price = explode(' ', $price);
-            return (float) str_replace(',', '.', $price[0]);
-        });
+        foreach ($this->classNames as $className) {
+            $price = $crawler->filter($className)->each(function (Crawler $node, $i) {
+                $price = $node->text();
+                $price = explode(' ', $price);
+                return (float) str_replace(',', '.', $price[0]);
+            });
+
+            if (!empty($price)) {
+                break;
+            }
+        }
+        
 
         if(empty($price)) {
-            $this->throwCantProccesOfferPriceException($this->offer->url, $this->body);
+            $this->throwCantProccesOfferPriceException($this->offer->id, $this->body);
         }
 
         return $price[0];

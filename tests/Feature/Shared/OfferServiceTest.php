@@ -16,13 +16,15 @@ class OfferServiceTest extends TestCase
     /** @test */
     public function offer_service_is_working_and_select_correct_adapter(): void
     {
-        $offer = Offer::factory()->create([
-            'url' => $this->getUrl(),
-        ]);
+        // $offer = Offer::factory()->create([
+        //     'url' => $this->getUrl(),
+        // ]);
 
-        Http::fake([
-            '*' => Http::response($this->excerptBodyOffer(), 200),
-        ]);
+        // Http::fake([
+        //     '*' => Http::response($this->excerptBodyOffer(), 200),
+        // ]);
+
+        //TODO: Dokonczyć
         
     }
 }

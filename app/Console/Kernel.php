@@ -12,7 +12,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $firstScanHour = rand(7, 9);
+        $secondHourScan = rand(19, 21);
+        $minutesScan = rand(1, 59);
+
+        // test
+        $firstScanHour = 12;
+        $minutesScan = 43;
+        $schedule->command('offers:scan')->everyMinute();
     }
 
     /**

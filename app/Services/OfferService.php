@@ -46,12 +46,16 @@ class OfferService
             return;
         }
 
-        if ($this->hasPriceChanged($fetchedPrice, $offer->price_current)) {
-            $newPrice = $offer->priceHistories->create([
+        if (empty(($offer->price_current)) | ($this->hasPriceChanged($fetchedPrice, $offer->price_current))) {
+            $newPrice = $offer->priceHistories()->create([
                 'price' => $fetchedPrice,
             ]);
 
-            $offer->priceActual()->sync([$newPrice->id]);
+            $offer->update([
+                'price_history_actual_id' => $newPrice->id,
+            ]);
+
+            $offer->refresh();
 
             OfferPriceChanged::dispatch($offer);
         }
@@ -62,3 +66,4 @@ class OfferService
         return $newPrice != $oldPrice;
     }
 }
+ 

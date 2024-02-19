@@ -4,6 +4,7 @@ namespace App\Listeners\Offer;
 
 use App\Notifications\Offer\OfferPriceChangedNotification;
 use App\Events\Offer\OfferPriceChanged;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
@@ -23,6 +24,7 @@ class SendEmailOfferPriceChangedNotification
      */
     public function handle(OfferPriceChanged $event): void
     {
-        Notification::send(auth()->user(), new OfferPriceChangedNotification($event->offer));
+        $user = User::find($event->offer->user_id);
+        Notification::send($user, new OfferPriceChangedNotification($event->offer));
     }
 }

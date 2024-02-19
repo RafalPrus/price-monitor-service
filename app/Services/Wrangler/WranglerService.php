@@ -27,7 +27,7 @@ class WranglerService extends AbstractOfferService
 
     public function getOfferBody()
     {
-        $response = Http::get($this->apiProvider, [
+        $response = Http::timeout(121)->get($this->apiProvider, [
             'api_key' => $this->apiKey,
             'url' => $this->offer->url,
         ]);

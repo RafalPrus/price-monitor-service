@@ -57,7 +57,7 @@ class Offer extends Model
     protected function priceCurrent(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->priceActual->price,
+            get: fn () => $this->priceActual?->price ?? null,
         );
     }
 }

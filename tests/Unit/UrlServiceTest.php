@@ -41,7 +41,7 @@ class UrlServiceTest extends TestCase
             ],
             [
                 'https://eu.wrangler.com/pl-pl/shop/mezczyzni/dzinsy-i-odziez/chinosy-i-spodnie-nie-z-denimu/pant-critter-in-plaza-taupe-112350887.html?merchCategory=c010000',
-                'eu.wrngler.com'
+                'eu.wrangler.com'
             ]
         ];
     }
