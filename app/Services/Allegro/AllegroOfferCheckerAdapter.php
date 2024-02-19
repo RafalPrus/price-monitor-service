@@ -4,11 +4,12 @@ namespace App\Services\Allegro;
 
 use App\Enums\AvailableStore;
 use App\Models\Offer;
+use App\Services\AbstractOfferCheckerAdapter;
 use App\Services\Contract\OfferCheckerInterface;
 use App\Services\UrlService;
 use App\Traits\PriceComparisonTrait;
 
-class AllegroOfferCheckerAdapter implements OfferCheckerInterface
+class AllegroOfferCheckerAdapter extends AbstractOfferCheckerAdapter implements OfferCheckerInterface
 {
     use PriceComparisonTrait;
     public const DOMAIN = 'allegro.pl';
@@ -21,13 +22,10 @@ class AllegroOfferCheckerAdapter implements OfferCheckerInterface
     {
         return $this->service->getOfferPrice();
     }
-    public function canHandle(): bool
-    {
-        if(!($this->service->offer->domain == self::DOMAIN)) {
-            return false;
-        }
 
-        if(!$this->service->canHandle()) {
+    public function getOfferBody(): bool
+    {
+        if(!$this->service->getOfferBody()) {
             return false;
         }
 

@@ -22,11 +22,13 @@ class OfferService
             $adapter = (new $adapter($offer));
             
             try {
-                if(!$adapter->canHandle($offer)) {
+                if(!$adapter->canHandleDomain($offer)) {
                     continue;
                 }
 
-                $fetchedPrice = $adapter->getOfferPrice($offer->url);
+                $adapter->getOfferBody();
+                $fetchedPrice = $adapter->getOfferPrice();
+
             } catch (InvalidBodyResponseException $e) {
                 Log::error($e->getMessage());
                 $offer->failedRequestBids()->create([

@@ -4,6 +4,7 @@ namespace Tests\Feature\Shared;
 
 use App\Models\Offer;
 use App\Services\Allegro\AllegroService;
+use App\Services\Wrangler\WranglerOfferCheckerAdapter;
 use App\Services\Wrangler\WranglerService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -25,13 +26,33 @@ class WranglerServiceTest extends TestCase
         ]);
 
         $service = new WranglerService($offer);
-
-        $canHandle = $service->canHandle();
+        $service->getOfferBody();
         $fetchedPrice = $service->getOfferPrice();
         
-        $this->assertSame(true, $canHandle);
         $this->assertSame(69.5, $fetchedPrice);
+    }
 
+    /** @test */
+    public function wrangler_service_adapter_is_working_and_returns_price_from_url(): void
+    {
+        $offer = Offer::factory()->create([
+            'url' => $this->getUrl(),
+        ]);
+
+        Http::fake([
+            '*' => Http::response($this->excerptBodyOffer(), 200),
+        ]);
+
+        $adapter = new WranglerOfferCheckerAdapter($offer);
+
+        $canHandleDomain = $adapter->canHandleDomain();
+        if ($canHandleDomain) {
+            $adapter->getOfferBody();
+            $fetchedPrice = $adapter->getOfferPrice();
+        }
+
+        $this->assertSame(true, $canHandleDomain);
+        $this->assertSame(69.5, $fetchedPrice);
     }
     public function getUrl(): string
     {

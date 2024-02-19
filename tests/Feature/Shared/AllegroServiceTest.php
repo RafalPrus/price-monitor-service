@@ -3,6 +3,7 @@
 namespace Tests\Feature\Shared;
 
 use App\Models\Offer;
+use App\Services\Allegro\AllegroOfferCheckerAdapter;
 use App\Services\Allegro\AllegroService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -25,9 +26,30 @@ class AllegroServiceTest extends TestCase
 
         $service = new AllegroService($offer);
 
-        $canHandle = $service->canHandle();
+        $service->getOfferBody();
         $fetchedPrice = $service->getOfferPrice();
-        $this->assertSame(true, $canHandle);
+        $this->assertSame(6.99, $fetchedPrice);
+    }
+
+    /** @test */
+    public function allegro_service_adapter_is_working_and_returns_price_from_url(): void
+    {
+        $offer = Offer::factory()->create([
+            'url' => $this->getUrl(),
+        ]);
+
+        Http::fake([
+            '*' => Http::response($this->excerptBodyOffer(), 200),
+        ]);
+
+        $adapter = new AllegroOfferCheckerAdapter($offer);
+        $canHandleDomain = $adapter->canHandleDomain();
+        if ($canHandleDomain) {
+            $adapter->getOfferBody();
+            $fetchedPrice = $adapter->getOfferPrice();
+        }
+
+        $this->assertSame(true, $canHandleDomain);
         $this->assertSame(6.99, $fetchedPrice);
     }
 

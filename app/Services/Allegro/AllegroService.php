@@ -25,7 +25,7 @@ class AllegroService extends AbstractOfferService
         $this->offer = $offer;
     }
 
-    public function canHandle(): bool
+    public function getOfferBody(): bool
     {
         $response = Http::get($this->apiProvider, [
             'api_key' => $this->apiKey,
@@ -44,7 +44,7 @@ class AllegroService extends AbstractOfferService
         return true;
     }
 
-    public function getOfferPrice(): float|bool
+    public function getOfferPrice(): float
     {
         $crawler = new Crawler($this->clearBody($this->body));
 
@@ -57,7 +57,7 @@ class AllegroService extends AbstractOfferService
         if(empty($price)) {
             $this->throwCantProccesOfferPriceException($this->offer->url, $this->body);
         }
-        
+
         return $price[0];
     }
 

@@ -25,7 +25,7 @@ class WranglerService extends AbstractOfferService
         $this->offer = $offer;
     }
 
-    public function canHandle()
+    public function getOfferBody()
     {
         $response = Http::get($this->apiProvider, [
             'api_key' => $this->apiKey,
@@ -54,7 +54,7 @@ class WranglerService extends AbstractOfferService
             $price = str_replace('ł', '', $price);
             return (float) str_replace(',', '.', $price);
         });
-        
+
         if(empty($prices)) {
             $this->throwCantProccesOfferPriceException($this->offer->id, $this->body);
         }

@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Models\Offer;
 use App\Models\PriceHistory;
 use App\Models\User;
-use App\Notifications\OfferPriceChangedNotification;
+use App\Notifications\Offer\OfferPriceChangedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
