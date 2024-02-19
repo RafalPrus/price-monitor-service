@@ -41,7 +41,6 @@ class WranglerService extends AbstractOfferService
         }
 
         $this->body = $response->body();
-        Log::info($this->body);
         return true;
 
     }
@@ -55,7 +54,7 @@ class WranglerService extends AbstractOfferService
             $price = str_replace('ł', '', $price);
             return (float) str_replace(',', '.', $price);
         });
-        dump($prices);
+        
         if(empty($prices)) {
             $this->throwCantProccesOfferPriceException($this->offer->id, $this->body);
         }

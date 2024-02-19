@@ -57,7 +57,7 @@ class AllegroService extends AbstractOfferService
         if(empty($price)) {
             $this->throwCantProccesOfferPriceException($this->offer->url, $this->body);
         }
-        dd($price);
+        
         return $price[0];
     }
 
