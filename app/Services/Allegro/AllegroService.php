@@ -6,6 +6,7 @@ use App\Exceptions\InvalidBodyResponseException;
 use App\Models\Offer;
 use App\Services\AbstractOfferService;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\BrowserKit\HttpBrowser;
@@ -27,17 +28,22 @@ class AllegroService extends AbstractOfferService
 
     public function getOfferBody(): bool
     {
-        $response = Http::timeout(121)->get($this->apiProvider, [
+        $response = Http::timeout(1)->get($this->apiProvider, [
             'api_key' => $this->apiKey,
             'url' => $this->offer->url,
         ]);
 
-        if(!$response->status() == 500) {
-            $this->throwCantFetchDataException($this->offer->id);
-        }
-
         if(!$response->successful()) {
-            return false;
+            if($response->status() == 500) {
+                $message = 'Api nie było w stanie pobrać danych (Status code 500) z przesłanego adresu dla oferty o numerze ID: ' . $this->offer->id;
+                Log::error($message);
+                $this->offer->failedRequestBids()->create([
+                    'error_message' => $message,
+                ]);
+                $this->throwApiCantFetchDataException($this->offer->id);
+            }
+
+            $this->throwCantFetchDataException($this->offer->id, $response->status());
         }
 
         $this->body = $response->body();

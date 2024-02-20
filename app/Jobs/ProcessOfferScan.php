@@ -32,5 +32,8 @@ class ProcessOfferScan implements ShouldQueue
 
         $offerService = new OfferService();
         $offerService->processOffer($this->offer);
+        if($offerService->success != true) {
+            $this->fail();
+        }
     }
 }

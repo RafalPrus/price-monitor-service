@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 class OfferService
 {
     public $checkerServices;
+    public bool $success = true;
 
     public function __construct()
     {
@@ -35,7 +36,7 @@ class OfferService
                     'error_message' => $e->getMessage(),
                 ]);
 
-                $fetchedPrice = null;
+                $this->success = false;
                 break;
             }
             
