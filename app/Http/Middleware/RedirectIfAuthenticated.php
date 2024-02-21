@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\JsonResponse;
 
 class RedirectIfAuthenticated
 {
@@ -21,7 +22,11 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                if(!$request->wantsJson()){
+                    return redirect(RouteServiceProvider::HOME);
+                } else {
+                    return new JsonResponse(null, Response::HTTP_PARTIAL_CONTENT);
+                }
             }
         }
 

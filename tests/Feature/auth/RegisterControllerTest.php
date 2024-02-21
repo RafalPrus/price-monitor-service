@@ -44,12 +44,12 @@ class RegisterControllerTest extends TestCase
             'password' => $pass,
             'password_confirmation' => $pass,
         ];
-
+        
         $response = $this->postJson(route('register'), $credentials);
         $response->assertStatus(201);
 
         $response = $this->postJson(route('login'), $credentials);
-        $response->assertRedirect('home');
+        $response->assertStatus(206);
 
         $this->assertDatabaseHas('users', [
             'email' => $email,
