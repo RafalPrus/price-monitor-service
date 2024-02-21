@@ -34,4 +34,11 @@ return [
             'host_ip' => gethostbyname(env('BROWSER_SHOT_CHROMIUM_HOSTNAME')),
         ],
     ],
+    'api_providers' => [
+        'scrapeops' => [
+            'url' => 'https://proxy.scrapeops.io/v1/',
+            'key' => env('SCRAPEOPS_API_PROVIDER_KEY'),
+        ],
+    ],
+    'api_provider' => 'scrapeops',
 ];

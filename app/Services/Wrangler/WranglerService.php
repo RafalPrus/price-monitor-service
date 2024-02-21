@@ -2,13 +2,10 @@
 
 namespace App\Services\Wrangler;
 
+use App\Facades\FetchApi;
 use App\Models\Offer;
 use App\Services\AbstractOfferService;
-use Illuminate\Support\Facades\Http;
-use Spatie\Browsershot\Browsershot;
 use Symfony\Component\DomCrawler\Crawler;
-use Goutte\Client;
-use Illuminate\Support\Facades\Log;
 
 class WranglerService extends AbstractOfferService
 {
@@ -20,29 +17,13 @@ class WranglerService extends AbstractOfferService
     public function __construct(Offer $offer)
     {
         $this->className = config('theapp.wrangler.data_provider.price_location.class_name');
-        $this->apiProvider = config('theapp.wrangler.data_provider.api_provider');
-        $this->apiKey = config('theapp.wrangler.data_provider.api_key');
         $this->offer = $offer;
     }
 
     public function getOfferBody()
     {
-        $response = Http::timeout(121)->get($this->apiProvider, [
-            'api_key' => $this->apiKey,
-            'url' => $this->offer->url,
-        ]);
-
-        if(!$response->status() == 500) {
-            $this->throwCantFetchDataException($this->offer->id);
-        }
-
-        if(!$response->successful()) {
-            return false;
-        }
-
-        $this->body = $response->body();
+        $this->body = FetchApi::makeRequest($this->offer)->body();
         return true;
-
     }
 
     public function getOfferPrice(): float
