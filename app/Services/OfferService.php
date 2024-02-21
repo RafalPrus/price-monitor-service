@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Events\Offer\OfferPriceChanged;
 use App\Exceptions\InvalidBodyResponseException;
 use App\Models\Offer;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class OfferService
@@ -35,9 +36,16 @@ class OfferService
                 $offer->failedRequestBids()->create([
                     'error_message' => $e->getMessage(),
                 ]);
-
+                $fetchedPrice = null;
                 $this->success = false;
                 break;
+            } catch (Exception $e) {
+                Log::error($e->getMessage());
+                $offer->failedRequestBids()->create([
+                    'error_message' => $e->getMessage(),
+                ]);
+
+                throw $e;
             }
             
             break;

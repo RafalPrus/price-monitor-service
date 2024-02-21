@@ -9,7 +9,7 @@ abstract class AbstractOfferService
 {
     public function throwCantFetchDataException(int $offerId, $responseStatus): InvalidBodyResponseException
     {
-        throw new InvalidBodyResponseException('Api nie było w stanie pobrać danych z oferty. Id oferty: ' . $offerId . ' Otrzymany status: ' . $responseStatus);
+        throw new InvalidBodyResponseException('Błąd po stronie API. Id oferty: ' . $offerId . ' Otrzymany status: ' . $responseStatus);
     }
 
     public function throwCantProccesOfferPriceException(int $offerId, string $body): InvalidBodyResponseException
