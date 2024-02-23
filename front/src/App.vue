@@ -1,7 +1,3 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
 
 <template>
   <header>
@@ -12,14 +8,33 @@ import HelloWorld from './components/HelloWorld.vue'
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">Login</RouterLink>
-        <RouterLink to="/register">Register</RouterLink>
+        <RouterLink v-if="!store.isAuthenticated" to="/register">Register</RouterLink>
+        <RouterLink v-if="!store.isAuthenticated" to="/login">Login</RouterLink>
+        <RouterLink v-if="store.isAuthenticated" to="/offers">Offers</RouterLink>
+        <RouterLink v-if="store.isAuthenticated" to="/me">Me</RouterLink>
+        <RouterLink v-if="store.isAuthenticated" @click="handleClick" to="/logout" event="" >Logout</RouterLink>
       </nav>
     </div>
   </header>
 
   <RouterView />
 </template>
+
+<script setup>
+
+import { useAuthStore } from '@/stores/useAuth'
+import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
+
+const store = useAuthStore()
+const { logout } = store
+
+const handleClick = async () => {
+  const res = await axios.post('http://localhost/api/logout')
+  console.log(res)
+  logout()
+}
+</script>
 
 <style scoped>
 header {

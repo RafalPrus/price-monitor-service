@@ -27,9 +27,11 @@ Artisan::command('fake_data', function () {
 })->purpose('Add fake data');
 
 Artisan::command('account_with_offers', function () {
-    $user = User::factory()->create([
-        'email_verified_at' => now(),
-    ]);
+    // $user = User::factory()->create([
+    //     'email_verified_at' => now(),
+    // ]);
+
+    $user = User::where('email', 'rr@rr.pl')->first();
 
     $exampleLinks = [
         'https://allegro.pl/oferta/kawa-ziarnista-brazilliana-toucano-1kg-swiezo-palona-100-arabica-11119122614?bi_s=ads_premium&bi_m=mainpage:showcase:desktop&referrer=proxy&emission_unit_id=28bc9256-446a-463c-8fac-6d2f9824ee26',

@@ -45,6 +45,8 @@
   import { useForm } from 'vee-validate';
   import * as yup from 'yup';
   import axios from 'axios';
+  import { useRouter } from 'vue-router';
+  import { useAuthStore } from '@/stores/useAuth'
 
   const vuetifyConfig = (state) => ({
     props: {
@@ -75,6 +77,7 @@ const [passwordConfirm, confirmProps] = defineField(
   vuetifyConfig
 );
 const [terms, termsProps] = defineField('terms', vuetifyConfig);
+const router = useRouter()
 
 const onSubmit = handleSubmit(async () => {
   try {
@@ -85,14 +88,23 @@ const onSubmit = handleSubmit(async () => {
       password_confirmation: passwordConfirm.value,
     }
 
-    const res = await axios.post('http://localhost/api/register', payload);
-    console.log(res)
+    await axios.post('http://localhost/api/register', payload);
+    await axios.post('http://localhost/api/login', {
+      emial: payload.email,
+      password: payload.password
+    });
+    const { data } = axios.get('http://localhost/api/users')
+    const store = useAuthStore()
+    const { login } = store
+    login(data)
+    router.push('/me')
+    
   } catch (error) {
     console.error('Error submitting form:', error)
     setFieldError('passwordConfirm', 'Ups, something went wrong...')
   }
   
-});
+})
 </script>
 
 <style>
