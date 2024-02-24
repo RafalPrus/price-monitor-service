@@ -1,28 +1,20 @@
 <template>
-    <v-container
-        class="main mb-6"
-    >
-        <v-row
-        align="start"
-        no-gutters
-        style="height: 150px;"
-        >
-        <v-col v-for="offer in offers" :key="offer.id">
-            <v-sheet class="pa-2 ma-2">
-                {{ offer.name }}
-            </v-sheet>
-            <v-sheet class="pa-2 ma-2">
-                {{ offer.url }}
-            </v-sheet>
-            <v-sheet class="pa-2 ma-2">
-                {{ user.created_at }}
-            </v-sheet>
-            <v-sheet class="pa-2 ma-2">
-                {{ offer.domain }}
-            </v-sheet>
-        </v-col>
-        </v-row>
-    </v-container>
+  <div class="d-flex align-center flex-column" v-if="offers" v-for="offer in offers" :key="offer.id">
+    <div class="text-subtitle-2 mt-2">{{ offer.name }}</div>
+    <v-card width="400">
+      <template v-slot:title>
+        {{ offer.name }}
+      </template>
+
+      <template v-slot:subtitle>
+        {{ offer.domain }}
+      </template>
+
+      <template v-slot:text>
+        {{ offer.created_at }}
+      </template>
+    </v-card>
+  </div>
 </template>
   
 <script setup>
@@ -35,7 +27,8 @@ const store = useAuthStore()
 const { user } = store
 onMounted(async () => {
     const res = await axios.get('http://localhost/api/offers')
-    offers = res.data
+    offers.value = res.data.data
+    console.log(offers.value)
 })
 </script>
   

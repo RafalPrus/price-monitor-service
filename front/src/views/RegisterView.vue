@@ -90,10 +90,10 @@ const onSubmit = handleSubmit(async () => {
 
     await axios.post('http://localhost/api/register', payload);
     await axios.post('http://localhost/api/login', {
-      emial: payload.email,
+      email: payload.email,
       password: payload.password
     });
-    const { data } = axios.get('http://localhost/api/users')
+    const { data } = await axios.get('http://localhost/api/users')
     const store = useAuthStore()
     const { login } = store
     login(data)
