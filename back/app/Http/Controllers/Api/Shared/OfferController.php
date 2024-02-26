@@ -73,7 +73,8 @@ class OfferController extends Controller
         $offers = QueryBuilder::for(Offer::class)
             ->where('user_id', $userId)
             ->with('priceActual')
-            ->allowedSorts(['name', 'url', 'price_histories.price',
+            ->defaultSort('created_at')
+            ->allowedSorts(['created_at', 'name', 'domain', 'price_histories.price',
                 AllowedSort::custom('price-actual', new ActualPriceSort(), 'price'),
             ])
             ->allowedFilters([

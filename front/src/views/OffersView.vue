@@ -1,9 +1,9 @@
 <template>
     <div class="d-flex align-center flex-column">
         <v-btn
-        :color="buttonFormColor"
-        class="mb-2"
-        @click="triggerForm"
+            :color="buttonFormColor"
+            class="mb-2"
+            @click="triggerForm"
         >
             {{ buttonFormText }}
         </v-btn>
@@ -11,6 +11,22 @@
             v-if="!hiddenForm"
             class="mb-2"
         />
+        <v-container class="d-flex align-center flex-row">
+            <v-select
+                v-model="sortBy"
+                class="mr-6"
+                label="Sort by"
+                :items="['Created at', 'Name', 'Domain', 'Actual Price']"
+            ></v-select>
+            <v-select
+                v-model="domainFilter"
+                label="Domain"
+                :items="['wrangler', 'allegro']"
+                chips
+                clearable
+                multiple
+            ></v-select>
+        </v-container>
         <div v-if="offers" v-for="offer in offers" :key="offer.id">
             <BaseOfferCard :offer="offer" @offer-deleted="getOffers" @offer-added="getOffers" />
         </div>
@@ -32,7 +48,8 @@ const { user } = store
 const hiddenForm = ref(true)
 const buttonFormText = ref('+ Add new offer')
 const buttonFormColor = ref('blue')
-
+const sortBy = ref('')
+const domainFilter = ref([])
 
 const getOffers = async () => {
     console.log('get offfers...')
@@ -55,8 +72,6 @@ const triggerForm = () => {
     }
 
 }
-
-
 </script>
   
 <style>
