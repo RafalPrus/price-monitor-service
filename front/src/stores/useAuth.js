@@ -1,14 +1,13 @@
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { defineStore } from 'pinia'
+import { useLocalStorage } from "@vueuse/core"
 
 export const useAuthStore = defineStore('counter', () => {
-  const user = ref(null)
+  const user = useLocalStorage('auth/logged', null)
   const isAuthenticated = computed(() => user.value != null)
 
   function login(data) {
-    console.log(data)
     user.value = data
-    console.log(user.value)
   }
 
   function logout() {

@@ -47,32 +47,30 @@ validationSchema: schema,
 })
 const router = useRouter()
 
-  const [email, emailProps] = defineField('email', vuetifyConfig);
-  const [password, passwordProps] = defineField('password', vuetifyConfig);
-  const [terms, termsProps] = defineField('terms', vuetifyConfig);
+const [email, emailProps] = defineField('email', vuetifyConfig);
+const [password, passwordProps] = defineField('password', vuetifyConfig);
+const [terms, termsProps] = defineField('terms', vuetifyConfig);
   
-  const onSubmit = handleSubmit(async () => {
+const onSubmit = handleSubmit(async () => {
     try {
-      const payload = {
+        const payload = {
         email: email.value,
         password: password.value,
-      }
-  
-      await axios.post('http://localhost/api/login', payload);
-      const res = await axios.get('http://localhost/api/users')
-      const store = useAuthStore()
-      const { login } = store
-      console.log(res.data)
-      console.log('data z usera')
-      login(res.data)
-      router.push('/me')
+        }
+        await axios.post('http://localhost/api/login', payload);
+        const res = await axios.get('http://localhost/api/users')
+        const store = useAuthStore()
+        const { login } = store
+        console.log(res.data)
+        console.log('data z usera')
+        login(res.data)
+        router.push('/me')
     } catch (error) {
-      console.error('Error submitting form:', error)
-      setFieldError('password', 'Niepoprawne dane logowania')
+        console.error('Error submitting form:', error)
+        setFieldError('password', 'Niepoprawne dane logowania')
     }
-    
-  })
-  </script>
+})
+</script>
   
   <style>
   @media (min-width: 1024px) {
