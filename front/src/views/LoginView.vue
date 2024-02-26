@@ -56,13 +56,11 @@ const onSubmit = handleSubmit(async () => {
         const payload = {
         email: email.value,
         password: password.value,
-        }
+    }
         await axios.post('http://localhost/api/login', payload);
         const res = await axios.get('http://localhost/api/users')
         const store = useAuthStore()
         const { login } = store
-        console.log(res.data)
-        console.log('data z usera')
         login(res.data)
         router.push('/me')
     } catch (error) {
@@ -72,13 +70,12 @@ const onSubmit = handleSubmit(async () => {
 })
 </script>
   
-  <style>
-  @media (min-width: 1024px) {
+<style>
+@media (min-width: 1024px) {
     .register {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
     }
-  }
-  </style>
-  
+}
+</style>

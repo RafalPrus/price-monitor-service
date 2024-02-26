@@ -23,20 +23,17 @@
 </template>
   
 <script setup>
-import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/useAuth'
   
 const store = useAuthStore()
 const { user } = store
-onMounted(async () => {
-})
 </script>
   
 <style>
 @media (min-width: 1024px) {
-.main {
-    width: 100%
-}
+    .main {
+        width: 100%
+    }
 }
 </style>
   
