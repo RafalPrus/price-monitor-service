@@ -13,13 +13,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $firstScanHour = rand(7, 9);
-        $secondHourScan = rand(19, 21);
-        $minutesScan = rand(1, 59);
+        $secondScanHour = rand(19, 21);
+        $scanMinutes = rand(1, 59);
 
-        // test
-        $firstScanHour = 12;
-        $minutesScan = 43;
-        $schedule->command('offers:scan')->everyMinute();
+        $schedule->command('offers:scan')->twiceDailyAt($firstScanHour, $secondScanHour, $scanMinutes);
     }
 
     /**
