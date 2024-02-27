@@ -2,7 +2,18 @@
   <v-container
       class="main mb-6"
   >
-    Hello world
+    <v-card
+        class="mx-auto"
+        max-width="344"
+        :title="mainMessage"
+        :subtitle="subtitle"
+        append-icon="mdi-check"
+    >
+      <v-card-text v-if="message">{{ message }}</v-card-text>
+      <template v-slot:append>
+        <v-icon icon="mdi-check" color="success"></v-icon>
+      </template>
+    </v-card>
   </v-container>
 </template>
 
@@ -13,6 +24,10 @@ import axios from 'axios'
 
 const route = useRoute();
 const queryParams = route.query;
+const mainMessage = ref('')
+const subtitle = ref('')
+const message = ref('')
+
 console.log(queryParams)
 
 onBeforeMount(async () => {
@@ -21,13 +36,15 @@ onBeforeMount(async () => {
     signature: queryParams.signature,
   }
   try {
-    axios.get('http://localhost/api/email/verify/' + queryParams.id + '/' + queryParams.token, { params })
+    await axios.get('http://localhost/api/email/verify/' + queryParams.id + '/' + queryParams.token, { params })
     console.log('success')
-  } catch (er) {
-    console.log('errror')
-    console.log(er)
+    mainMessage.value = 'Success'
+    subtitle.value = 'You confirmed your email successfully'
+    message.value = 'Now you can add your first offer and wait for a new promotion'
+  } catch (error) {
+    mainMessage.value = 'Fail'
+    subtitle.value = 'Whoops, something went wrong'
   }
-
 })
 </script>
 
