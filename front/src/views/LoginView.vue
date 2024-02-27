@@ -54,14 +54,17 @@ const [terms, termsProps] = defineField('terms', vuetifyConfig);
 const onSubmit = handleSubmit(async () => {
     try {
         const payload = {
-        email: email.value,
-        password: password.value,
-    }
-        await axios.post('http://localhost/api/login', payload);
-        const res = await axios.get('http://localhost/api/users')
-        const store = useAuthStore()
-        const { login } = store
-        login(res.data)
+          email: email.value,
+          password: password.value,
+        }
+        await axios.post('http://localhost/api/login', payload)
+            .then(async () => {
+              const res = await axios.get('http://localhost/api/users')
+              const store = useAuthStore()
+              const { login } = store
+              login(res.data)
+            });
+
         router.push('/me')
     } catch (error) {
         console.error('Error submitting form:', error)

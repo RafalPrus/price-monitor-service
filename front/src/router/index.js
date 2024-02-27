@@ -30,7 +30,6 @@ const router = createRouter({
       name: 'me',
       component: () => import('../views/MeView.vue')
     },
-    ,
     {
       path: '/offers',
       name: 'offers',
@@ -42,6 +41,11 @@ const router = createRouter({
       redirect: to => {
         return { path: '/' }
       },
+    },
+    {
+      path: '/register/confirm',
+      name: 'confirm-email',
+      component: () => import('../views/EmailConfirmed.vue'),
     }
   ]
 })

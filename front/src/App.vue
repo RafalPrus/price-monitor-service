@@ -2,8 +2,8 @@
 <template>
   <header>
     <div class="wrapper">
-      <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-      <HelloWorld msg="You did it!" />
+      <img alt="Vue logo" class="logo" src="@/assets/logo.jpg" width="125" height="125" />
+      <HelloWorld msg="Hunt your promo!" />
     </div>
     <div class="wrapper">
       <nav>
@@ -12,7 +12,7 @@
         <RouterLink v-if="!store.isAuthenticated" to="/login">Login</RouterLink>
         <RouterLink v-if="store.isAuthenticated" to="/offers">Offers</RouterLink>
         <RouterLink v-if="store.isAuthenticated" to="/me">Me</RouterLink>
-        <RouterLink v-if="store.isAuthenticated" @click="handleClick" to="/logout" event="" >Logout</RouterLink>
+        <RouterLink v-if="store.isAuthenticated" @click.prevent="handleClick" to="/logout" event="" >Logout</RouterLink>
       </nav>
     </div>
   </header>
@@ -25,14 +25,16 @@
 import { useAuthStore } from '@/stores/useAuth'
 import HelloWorld from './components/HelloWorld.vue'
 import axios from 'axios'
+import { useRouter } from "vue-router";
 
 const store = useAuthStore()
 const { logout } = store
+const router = useRouter()
 
 const handleClick = async () => {
   const res = await axios.post('http://localhost/api/logout')
-  console.log(res)
   logout()
+  window.location.reload()
 }
 </script>
 
