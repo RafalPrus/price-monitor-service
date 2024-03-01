@@ -12,7 +12,7 @@
         <RouterLink v-if="!store.isAuthenticated" to="/login">Login</RouterLink>
         <RouterLink v-if="store.isAuthenticated" to="/offers">Offers</RouterLink>
         <RouterLink v-if="store.isAuthenticated" to="/me">Me</RouterLink>
-        <RouterLink v-if="store.isAuthenticated" @click.prevent="handleClick" to="/logout" event="" >Logout</RouterLink>
+        <RouterLink v-if="store.isAuthenticated" @click.prevent="handleClick" to="/logout">Logout</RouterLink>
       </nav>
     </div>
   </header>
@@ -24,17 +24,15 @@
 
 import { useAuthStore } from '@/stores/useAuth'
 import HelloWorld from './components/HelloWorld.vue'
-import axios from 'axios'
+import { logout } from '@/Repositories/AuthRepository'
 import { useRouter } from "vue-router";
 
 const store = useAuthStore()
-const { logout } = store
 const router = useRouter()
 
 const handleClick = async () => {
-  const res = await axios.post('http://localhost/api/logout')
-  logout()
-  window.location.reload()
+   await logout()
+   router.push('/login')
 }
 </script>
 

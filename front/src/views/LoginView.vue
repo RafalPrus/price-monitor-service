@@ -23,13 +23,11 @@
   </template>
   
 <script setup>
-import { ref } from 'vue'
 // vee-validate
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/useAuth'
+import { login } from '@/Repositories/AuthRepository'
   
 const vuetifyConfig = (state) => ({
     props: {
@@ -57,14 +55,8 @@ const onSubmit = handleSubmit(async () => {
           email: email.value,
           password: password.value,
         }
-        await axios.post('http://localhost/api/login', payload)
-            .then(async () => {
-              const res = await axios.get('http://localhost/api/users')
-              const store = useAuthStore()
-              const { login } = store
-              login(res.data)
-            });
 
+        await login(payload)
         router.push('/me')
     } catch (error) {
         console.error('Error submitting form:', error)

@@ -27,14 +27,14 @@ const vuetify = createVuetify({
 
 
 const getCookie = async () => {
-  console.log('setted 2')
+  axios.defaults.baseURL = 'http://localhost/'
   axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
   axios.defaults.headers.common['Content-Type'] = 'apllication/json'
   axios.defaults.headers.common['Accept'] = 'apllication/json'
   axios.defaults.withCredentials = true
   axios.defaults.withXSRFToken = true;
-  
-  await axios.get('http://localhost/sanctum/csrf-cookie')
+  console.log('sanctum/csrf-cookie')
+  await axios.get('sanctum/csrf-cookie')
 }
 getCookie()
 

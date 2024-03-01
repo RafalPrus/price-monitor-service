@@ -4,15 +4,16 @@ import { useLocalStorage } from "@vueuse/core"
 
 export const useAuthStore = defineStore('counter', () => {
   const user = useLocalStorage('auth/logged', null)
+
   const isAuthenticated = computed(() => user.value != null)
 
-  function login(data) {
+  function loginAuthStore(data) {
     user.value = data
   }
 
-  function logout() {
+  function logoutAuthStore() {
     user.value = null
   }
 
-  return { user, isAuthenticated, login, logout }
+  return { user, isAuthenticated, loginAuthStore, logoutAuthStore }
 })

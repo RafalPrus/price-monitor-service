@@ -40,13 +40,10 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
-  // vee-validate
   import { useForm } from 'vee-validate';
   import * as yup from 'yup';
-  import axios from 'axios';
   import { useRouter } from 'vue-router';
-  import { useAuthStore } from '@/stores/useAuth'
+  import { register } from '@/Repositories/AuthRepository'
 
   const vuetifyConfig = (state) => ({
     props: {
@@ -88,22 +85,12 @@ const onSubmit = handleSubmit(async () => {
       password_confirmation: passwordConfirm.value,
     }
 
-    await axios.post('http://localhost/api/register', payload);
-    await axios.post('http://localhost/api/login', {
-      email: payload.email,
-      password: payload.password
-    });
-    const { data } = await axios.get('http://localhost/api/users')
-    const store = useAuthStore()
-    const { login } = store
-    login(data)
+    register(payload)
     router.push('/me')
-    
   } catch (error) {
     console.error('Error submitting form:', error)
     setFieldError('passwordConfirm', 'Ups, something went wrong...')
   }
-  
 })
 </script>
 

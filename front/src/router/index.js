@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import { useAuthStore } from '@/stores/useAuth'
+import { AuthMiddleware } from '@/Middlewares/AuthMiddleware'
+import { useAuthStore } from "@/stores/useAuth";
+import middlewarePipeline from './middlewarePipeline'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,7 +35,10 @@ const router = createRouter({
     {
       path: '/offers',
       name: 'offers',
-      component: () => import('../views/OffersView.vue')
+      component: () => import('../views/OffersView.vue'),
+      meta: {
+        middleware: [AuthMiddleware]
+      }
     },
     {
       path: '/logout',
@@ -50,13 +55,23 @@ const router = createRouter({
   ]
 })
 
-
 router.beforeEach((to, from, next) => {
-  const store = useAuthStore()
-  const { isAuthenticated } = store
-  if ((to.name !=='login' && to.name !=='home' && to.name !=='register')  && !isAuthenticated) next({ name: 'login' })
-    
-  else next()
+  if (!to.meta.middleware) {
+      return next()
+  }
+  const middleware = to.meta.middleware
+
+  const context = {
+      to,
+      from,
+      next,
+      useAuthStore
+  }
+
+  return middleware[0]({
+      ...context,
+      next: middlewarePipeline(context, middleware, 1)
+  })
 })
 
 export default router
