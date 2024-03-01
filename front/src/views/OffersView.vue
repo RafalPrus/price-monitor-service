@@ -1,12 +1,40 @@
 <template>
     <div class="d-flex align-center flex-column">
         <v-btn
+            v-if="user.email_verified_at"
             :color="buttonFormColor"
             class="mb-2"
             @click="triggerForm"
         >
             {{ buttonFormText }}
         </v-btn>
+        <v-dialog max-width="500">
+            <template v-slot:activator="{ props: activatorProps }">
+              <v-btn
+                v-bind="activatorProps"
+                color="surface-variant"
+                text="Add new offer"
+                variant="flat"
+              ></v-btn>
+            </template>
+          
+            <template v-slot:default="{ isActive }">
+              <v-card title="Ups">
+                <v-card-text>
+                    In order to add new offer you have to verify your email first
+                </v-card-text>
+          
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+          
+                  <v-btn
+                    text="Close Dialog"
+                    @click="isActive.value = false"
+                  ></v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
         <BaseOfferForm
             v-if="!hiddenForm"
             class="mb-2"
@@ -45,9 +73,10 @@ import { formatDate } from "@/services/DateService.js"
 const offers = ref(null)
 const store = useAuthStore()
 const { user } = store
+console.log(user)
 const hiddenForm = ref(true)
 const buttonFormText = ref('+ Add new offer')
-const buttonFormColor = ref('blue')
+const buttonFormColor = user.email_verified_at ? ref('blue') : ref('grey-lighten-1')
 const sortBy = ref('')
 const domainFilter = ref([])
 
@@ -58,6 +87,7 @@ const getOffers = async () => {
 }
 
 onMounted(async () => {
+    
     getOffers()
 })
 
@@ -70,7 +100,6 @@ const triggerForm = () => {
         buttonFormText.value = '+ Add new offer'
         buttonFormColor.value = 'blue'
     }
-
 }
 </script>
   

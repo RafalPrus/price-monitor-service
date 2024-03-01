@@ -85,7 +85,7 @@ const onSubmit = handleSubmit(async () => {
       password_confirmation: passwordConfirm.value,
     }
 
-    register(payload)
+    await register(payload)
     router.push('/me')
   } catch (error) {
     console.error('Error submitting form:', error)

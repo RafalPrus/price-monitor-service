@@ -1,12 +1,14 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/useAuth'
 
-
+export const getAuth = async () => {
+    return await axios.get('api/users')
+}
 
 export const login = async (data) => {
     const store = useAuthStore()
     await axios.post('api/login', data)
-    const response = await axios.get('api/users')
+    const response = await getAuth()
     const { loginAuthStore } = store
     loginAuthStore(response.data)
 }
@@ -16,7 +18,6 @@ export const logout = async () => {
     await axios.post('api/logout')
     const { logoutAuthStore } = store
     logoutAuthStore()
-    window.location.reload()
 }
 
 export const register = async (data) => {
@@ -26,10 +27,10 @@ export const register = async (data) => {
       password: data.password
     })
 
-    const response = await axios.get('api/users')
+    const response = await getAuth()
     const store = useAuthStore()
     const { loginAuthStore } = store
     loginAuthStore(response.data)
 }
 
-export default { login, logout, register }
+export default { login, logout, register, getAuth }

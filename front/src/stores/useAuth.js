@@ -15,5 +15,9 @@ export const useAuthStore = defineStore('counter', () => {
     user.value = null
   }
 
-  return { user, isAuthenticated, loginAuthStore, logoutAuthStore }
+  async function updateAuthStore(data) {
+    user.value = data
+  }
+
+  return { user, isAuthenticated, loginAuthStore, logoutAuthStore, updateAuthStore }
 })

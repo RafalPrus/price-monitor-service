@@ -32,6 +32,7 @@ const router = useRouter()
 
 const handleClick = async () => {
    await logout()
+   window.location.reload()
    router.push('/login')
 }
 </script>

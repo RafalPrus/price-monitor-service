@@ -27,6 +27,8 @@ import { useAuthStore } from '@/stores/useAuth'
   
 const store = useAuthStore()
 const { user } = store
+
+console.log(user)
 </script>
   
 <style>

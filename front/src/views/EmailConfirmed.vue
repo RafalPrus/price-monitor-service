@@ -11,7 +11,7 @@
     >
       <v-card-text v-if="message">{{ message }}</v-card-text>
       <template v-slot:append>
-        <v-icon icon="mdi-check" color="success"></v-icon>
+        <v-icon icon="mdi-check" :color="mainMessage"></v-icon>
       </template>
     </v-card>
   </v-container>
@@ -20,7 +20,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import {ref, onBeforeMount, onMounted} from 'vue'
-import axios from 'axios'
+import { verifyEmail } from '@/Repositories/EmailVerifyRepository'
 
 const route = useRoute();
 const queryParams = route.query;
@@ -36,12 +36,14 @@ onBeforeMount(async () => {
     signature: queryParams.signature,
   }
   try {
-    await axios.get('http://localhost/api/email/verify/' + queryParams.id + '/' + queryParams.token, { params })
+    console.log(params)
+    await verifyEmail(queryParams, params)
     console.log('success')
     mainMessage.value = 'Success'
     subtitle.value = 'You confirmed your email successfully'
     message.value = 'Now you can add your first offer and wait for a new promotion'
   } catch (error) {
+    console.log(error)
     mainMessage.value = 'Fail'
     subtitle.value = 'Whoops, something went wrong'
   }
