@@ -75,6 +75,8 @@ nav a:first-of-type {
 
 @media (min-width: 1024px) {
   header {
+    max-width: 1024px;
+    margin: 0 auto;
     display: flex;
     place-items: flex-start stretch;
     justify-content: space-between;

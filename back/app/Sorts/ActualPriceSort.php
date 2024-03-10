@@ -14,8 +14,7 @@ class ActualPriceSort implements \Spatie\QueryBuilder\Sorts\Sort
 
         // Below is equivalent to: Person::select($property)->whereColumn('people.id', 'person_id')
         // We're using a standard DB call to return Illuminate\Database\Query\Builder to satisfy static analysis
-        $subQuery = DB::table(with(new PriceHistory())->getTable())
-            ->select($property)
+        $subQuery = PriceHistory::select($property)
             ->whereColumn('price_histories.id', 'price_history_actual_id');
 
         $query->orderBy($subQuery, $direction);

@@ -15,9 +15,14 @@ export const login = async (data) => {
 
 export const logout = async () => {
     const store = useAuthStore()
-    await axios.post('api/logout')
     const { logoutAuthStore } = store
-    logoutAuthStore()
+    try {
+        await axios.post('api/logout')
+        logoutAuthStore()
+    } catch (error) {
+        logoutAuthStore()
+    }
+
 }
 
 export const register = async (data) => {

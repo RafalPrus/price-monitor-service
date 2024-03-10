@@ -1,4 +1,5 @@
 <template>
+  <main>
     <div class="d-flex align-center flex-column">
         <v-btn
             v-if="user.email_verified_at"
@@ -28,7 +29,7 @@
                   <v-spacer></v-spacer>
           
                   <v-btn
-                    text="Close Dialog"
+                    text="Close"
                     @click="isActive.value = false"
                   ></v-btn>
                 </v-card-actions>
@@ -59,6 +60,7 @@
             <BaseOfferCard :offer="offer" @offer-deleted="getOffers" @offer-added="getOffers" />
         </div>
     </div>
+  </main>
 </template>
   
 <script setup>
