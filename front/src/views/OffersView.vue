@@ -4,12 +4,12 @@
         <v-btn
             v-if="user.email_verified_at"
             :color="buttonFormColor"
-            class="mb-2"
+            class="mb-2 mt-2"
             @click="triggerForm"
         >
             {{ buttonFormText }}
         </v-btn>
-        <v-dialog max-width="500">
+        <v-dialog max-width="500" v-if="!user.email_verified_at">
             <template v-slot:activator="{ props: activatorProps }">
               <v-btn
                 v-bind="activatorProps"
@@ -39,6 +39,7 @@
         <BaseOfferForm
             v-if="!hiddenForm"
             class="mb-2"
+            @offer-added="getOffers"
         />
         <v-container class="d-flex align-center flex-row">
             <v-select
@@ -57,7 +58,7 @@
             ></v-select>
         </v-container>
         <div v-if="offers" v-for="offer in offers" :key="offer.id">
-            <BaseOfferCard :offer="offer" @offer-deleted="getOffers" @offer-added="getOffers" />
+            <BaseOfferCard :offer="offer" @offer-deleted="getOffers"/>
         </div>
     </div>
   </main>
@@ -66,6 +67,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/useAuth'
+import { storeToRefs } from 'pinia'
 import axios from 'axios'
 import BaseOfferCard from '../components/Offer/BaseOfferCard.vue'
 import BaseOfferForm from '../components/Offer/BaseOfferForm.vue'
@@ -74,12 +76,12 @@ import { formatDate } from "@/services/DateService.js"
 
 const offers = ref(null)
 const store = useAuthStore()
-const { user } = store
-console.log(user)
+const { user } = storeToRefs(store)
+console.log(user.value.email_verified_at)
 const hiddenForm = ref(true)
 const buttonFormText = ref('+ Add new offer')
-const buttonFormColor = user.email_verified_at ? ref('blue') : ref('grey-lighten-1')
-const sortBy = ref('')
+const buttonFormColor = user.value.email_verified_at ? ref('blue') : ref('grey-lighten-1')
+const sortBy = ref('Created at')
 const domainFilter = ref([])
 
 const getOffers = async () => {

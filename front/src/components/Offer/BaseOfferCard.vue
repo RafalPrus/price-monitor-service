@@ -1,6 +1,5 @@
 <template>
-    <div class="d-flex align-center flex-column">
-        <div class="text-subtitle-2 mt-2">{{ offer.name }}</div>
+    <div class="d-flex align-center flex-column mb-2">
         <v-card width="600">
             <template v-slot:title>
             {{ offer.name }}
@@ -15,16 +14,33 @@
                     <div class="mb-2">Actual price: <span class="text-purple-accent-3">{{ offer.price_actual.price }}</span></div>
                     <div>Last Update: {{ formatDate(offer.price_actual.created_at) }}</div>
                 </div>
+              <div>
                 Monitoring since: {{ formatDate(offer.created_at) }}
+              </div>
             </template>
             <template v-slot:actions>
-            <v-btn color="blue">
-                Edit
-            </v-btn>
-        
-            <v-btn color="red" @click="deleteOffer(offer)">
-                Delete
-            </v-btn>
+              <v-container class="m-0 p-0">
+              <v-row>
+                <v-col cols="12" sm="12" class="mb-2">
+                  <v-btn :href="offer.url" target="_blank">
+                    Take me to the offer
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="2">
+                  <v-btn color="blue">
+                    Edit
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="2">
+                  <v-btn color="red" @click="deleteOffer(offer)">
+                    Delete
+                  </v-btn>
+                </v-col>
+              </v-row>
+              </v-container>
+
+
+
             </template>
         </v-card>
     </div>

@@ -7,7 +7,7 @@
         <v-form @submit.prevent="">
           <v-responsive
               max-width="344"
-              class="ml-4"
+              class="ml-4 mr-4"
           >
             <v-text-field
                 v-model="user.name"
@@ -25,9 +25,10 @@
               variant="outlined"
           />
           </v-responsive>
-
-          <v-btn color="outline" type="submit">Reset</v-btn>
-          <v-btn color="primary" class="ml-4" @click="">Save</v-btn>
+          <v-container >
+            <v-btn color="primary" @click="">Save</v-btn>
+            <v-btn class="ml-4" color="outline" type="submit">Reset</v-btn>
+          </v-container>
         </v-form>
       </v-card>
 

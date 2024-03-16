@@ -1,23 +1,25 @@
 import { computed } from 'vue'
-import { defineStore } from 'pinia'
+import {defineStore, skipHydrate} from 'pinia'
 import { useLocalStorage } from "@vueuse/core"
 
-export const useAuthStore = defineStore('counter', () => {
-  const user = useLocalStorage('auth/logged', null)
+export const useAuthStore = defineStore('auth', () => {
+  const user= useLocalStorage('auth.logged', 'unauthorized')
+  console.log('store')
+  console.log(user.value)
 
-  const isAuthenticated = computed(() => user.value != null)
+  const isAuthenticated = computed(() => user.value != 'unauthorized')
 
   function loginAuthStore(data) {
     user.value = data
   }
 
   function logoutAuthStore() {
-    user.value = null
+    user.value = 'unauthorized'
   }
 
   async function updateAuthStore(data) {
     user.value = data
   }
 
-  return { user, isAuthenticated, loginAuthStore, logoutAuthStore, updateAuthStore }
+  return { user: skipHydrate(user), isAuthenticated, loginAuthStore, logoutAuthStore, updateAuthStore }
 })
