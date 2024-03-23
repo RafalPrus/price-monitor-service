@@ -15,6 +15,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class OfferController extends Controller
 {
+    protected $indexRelations = ['priceActual'];
+    protected $relations = ['priceActual'];
     /**
      * Offers - list
      *
@@ -72,7 +74,7 @@ class OfferController extends Controller
 
         $offers = QueryBuilder::for(Offer::class)
             ->where('user_id', $userId)
-            ->with('priceActual')
+            ->with($this->indexRelations)
             ->defaultSort('created_at')
             ->allowedSorts(['created_at', 'name', 'domain', 'price_histories.price',
                 AllowedSort::custom('price-actual', new ActualPriceSort(), 'price'),
@@ -83,6 +85,10 @@ class OfferController extends Controller
             ])
             ->jsonPaginate()
         ;
+
+        foreach($offers as $offer) {
+            $offer->append('price_last_previous');
+        }
 
         return OfferResource::collection($offers);
     }

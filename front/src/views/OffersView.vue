@@ -58,7 +58,7 @@
             ></v-select>
         </v-container>
         <div v-if="offers" v-for="offer in offers" :key="offer.id">
-            <BaseOfferCard :offer="offer" @offer-deleted="getOffers"/>
+            <BaseOfferCard :offer="offer" @offer-deleted="getOffers" @offer-scaned="getOffers(2)"/>
         </div>
     </div>
   </main>
@@ -80,14 +80,22 @@ const { user } = storeToRefs(store)
 console.log(user.value.email_verified_at)
 const hiddenForm = ref(true)
 const buttonFormText = ref('+ Add new offer')
-const buttonFormColor = user.value.email_verified_at ? ref('blue') : ref('grey-lighten-1')
+const buttonFormColor = (user.value.email_verified_at ? ref('blue') : ref('grey-lighten-1'))
 const sortBy = ref('Created at')
 const domainFilter = ref([])
 
-const getOffers = async () => {
-    console.log('get offfers...')
-    const res = await axios.get('http://localhost/api/offers')
-    offers.value = res.data.data
+const getOffers = async (time = 0) => {
+    if(time != 0) {
+      const milliseconds = time * 60000;
+
+      setTimeout(async() => {
+          const res = await axios.get('http://localhost/api/offers')
+          offers.value = res.data.data
+      }, milliseconds);
+    } else {
+      const res = await axios.get('http://localhost/api/offers')
+      offers.value = res.data.data
+    }
 }
 
 onMounted(async () => {

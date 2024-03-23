@@ -101,8 +101,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
     Route::middleware('verified')->group(function () {
-        Route::apiResource('offers', \App\Http\Controllers\Api\Shared\OfferController::class);
+        Route::post('offer/scan/{offer}', [\App\Http\Controllers\Api\Shared\ScanOnDemandOfferController::class, 'store'])
+            ->name('shared.offer.scan');
 
+        Route::apiResource('offers', \App\Http\Controllers\Api\Shared\OfferController::class);
     });
 
 

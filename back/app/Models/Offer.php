@@ -60,4 +60,19 @@ class Offer extends Model
             get: fn () => $this->priceActual?->price ?? null,
         );
     }
+
+    protected function priceLastPrevious(): Attribute
+    {
+
+        return Attribute::make(
+            get: function () {
+                if ($this->price_current) {
+                    $priceHistories = $this->priceActual()->orderBy('created_at', 'desc')->limit(2);
+                    return $priceHistories->count() == 2 ? $priceHistories[1] : null;
+                }
+
+                return null;
+            }
+        );
+    }
 }
